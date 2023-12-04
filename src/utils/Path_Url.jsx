@@ -1,0 +1,6 @@
+export const Login = "/login"
+export const DashBord = "/"
+export const Userpage = "/userpage"
+export const History = "/history"
+export const Movement = "/movement"
+export const Warehouse = "/warehouse"
