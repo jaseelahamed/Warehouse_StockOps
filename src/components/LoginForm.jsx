@@ -4,15 +4,14 @@ import { useAuth } from "../service/Context";
 import { Show_Toast } from "../utils/Toast";
 import { useNavigate } from "react-router-dom";
 import { DashBord } from "../utils/Path_Url";
+
 function LoginForm() {
-
-  const navigate =useNavigate()
-
+  const navigate = useNavigate();
   const { login } = useAuth();
 
   const [formData, setFormData] = useState({
-    email: "",
-    pswd: "",
+     username: "",
+    password: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -24,7 +23,7 @@ function LoginForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+
     // Form validation logic
     const validationErrors = validateForm(formData);
     setErrors(validationErrors);
@@ -32,23 +31,24 @@ function LoginForm() {
     if (Object.keys(validationErrors).length === 0) {
       // Call API if there are no validation errors
       try {
-        console.log("formdat", formData);
-        const response = await ApiCall("post", "/login", formData);
-        console.log("api response", response);
+        const response = await ApiCall("post", "/users/login", formData);
 
-        if (response.status) {
+        if (response.data && response.data.data) {
           // Successful login
           console.log("Login Successful:", response.message);
+
           // Store the token using the login function from the context
           login(response.data.token);
-          Show_Toast(response.message, true)
-          navigate(DashBord)
-          // alert(response.message)
-          // You might want to redirect or perform other actions after successful login
+          Show_Toast(response.message, true);
+
+          // Redirect to the dashboard
+          navigate(DashBord);
         } else {
           // Handle authentication error
           console.error("Login Failed:", response.message);
-          // You might want to show an error message to the user
+
+          // Show an error message to the user
+          Show_Toast(response.message, false);
         }
       } catch (error) {
         console.error("API Error:", error);
@@ -60,16 +60,17 @@ function LoginForm() {
   const validateForm = (data) => {
     const errors = {};
 
-    if (!data.email) {
-      errors.email = "Username or email is required";
+    if (!data. username) {
+      errors. username = "Username or  username is required";
     }
 
-    if (!data.pswd) {
-      errors.pswd = "Password is required";
+    if (!data.password) {
+      errors.password = "Password is required";
     }
 
     return errors;
   };
+
 
   return (
     <div className="container-scroller">
@@ -81,37 +82,40 @@ function LoginForm() {
                 <h3 className="card-title text-left mb-3">Login</h3>
                 <form onSubmit={handleSubmit}>
                   <div className="form-group">
-                    <label>Username or email *</label>
+                    <label>Username or username *</label>
                     <input
                       type="text"
                       className={`form-control p_input ${
-                        errors.email ? "is-invalid" : ""
+                        errors.username ? "is-invalid" : ""
                       }`}
-                      placeholder="Enter username or email"
-                      name="email"
-                      value={formData.email}
+                      placeholder="Enter username or username"
+                      name="username"
+                      value={formData.username}
                       onChange={handleInputChange}
                     />
-                    <div className="invalid-feedback">{errors.email}</div>
+                    <div className="invalid-feedback">{errors.username}</div>
                   </div>
                   <div className="form-group">
                     <label>Password *</label>
                     <input
                       type="password"
                       className={`form-control p_input ${
-                        errors.pswd ? "is-invalid" : ""
+                        errors.password ? "is-invalid" : ""
                       }`}
                       placeholder="Enter password"
-                      name="pswd"
-                      value={formData.pswd}
+                      name="password"
+                      value={formData.password}
                       onChange={handleInputChange}
                     />
-                    <div className="invalid-feedback">{errors.pswd}</div>
+                    <div className="invalid-feedback">{errors.password}</div>
                   </div>
                   <div className="form-group d-flex align-items-center justify-content-between">
                     <div className="form-check">
                       <label className="form-check-label">
-                        <input type="checkbox" className="form-check-input" />{" "}
+                        <input
+                          type="checkbox"
+                          className="form-check-input"
+                        />{" "}
                         Remember me
                       </label>
                     </div>

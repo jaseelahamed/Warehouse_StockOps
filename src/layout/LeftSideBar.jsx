@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Userpage, Login, Movement,Warehouse } from "../utils/Path_Url";
+import { Userpage, Login, Movement,Warehouse,Stocks,Return } from "../utils/Path_Url";
 import { History,DashBord } from "../utils/Path_Url";
 
 
@@ -151,9 +151,9 @@ function LeftSideBar() {
             </Link>
           </li>
           <li className="nav-item menu-items">
-            <a
+            <Link
               className="nav-link"
-              href="#"
+              to={Stocks}
             >
               <span className="menu-icon">
               <i class="mdi mdi-clipboard-text"  style={{
@@ -166,7 +166,7 @@ function LeftSideBar() {
                           }}></i> 
               </span>
               <span className="menu-title">Stock List</span>
-            </a>
+            </Link>
           </li>
           <li className="nav-item menu-items">
             <Link className="nav-link" to={Movement}>
@@ -219,7 +219,7 @@ function LeftSideBar() {
       </div>
     </li>
           <li className="nav-item menu-items">
-            <a className="nav-link" href="#">
+            <Link className="nav-link" to={Return}>
               <span className="menu-icon">
               <i class="mdi mdi-heart-broken"  style={{
                             fontSize: "1.5em",
@@ -228,8 +228,8 @@ function LeftSideBar() {
                          
                           }}></i>
               </span>
-              <span className="menu-title">Death Stock</span>
-            </a>
+              <span className="menu-title">Return Stock</span>
+            </Link>
           </li>
         </ul>
       </nav>

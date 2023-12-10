@@ -12,36 +12,31 @@ function UserDetails() {
   const [errors, setErrors] = useState(null);
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-
+  
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        setLoading(true);
-        const apiResponse = await ApiCall("GET", "/users", null);
-
-        if (apiResponse.status === 200) {
-          setUsers(apiResponse.data.data);
-        } else {
-          setErrors(apiResponse.message || "Failed to fetch users");
-        }
-      } catch (error) {
-        setErrors("Error fetching users");
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchUsers();
   }, []);
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
+  // const fetchUsers = async () => {
 
-  if (errors) {
-    return <p>Error: {errors}</p>;
-  }
+  // };
 
+  const fetchUsers = async () => {
+    try {
+      // setLoading(true);
+      const apiResponse = await ApiCall("GET", "/users", null);
+      console.log("response", apiResponse);
+      if (apiResponse.status === 200) {
+        setUsers(apiResponse.data.data);
+      } else {
+        setErrors(apiResponse.message || "Failed to fetch users");
+      }
+    } catch (error) {
+      setErrors("Error fetching users");
+    } finally {
+      setLoading(false);
+    }
+  };
   const handleOpenModal = (userData) => {
     setData(userData || {});
     setIsModalOpen(true);
@@ -84,15 +79,30 @@ function UserDetails() {
       const response = await ApiCall(method, endpoint, requestData);
 
       if (response.status) {
-        console.log(isToggleAction ? "User status updated successfully" : "User created/edited successfully");
-        Show_Toast(response.status);
+        console.log(
+          isToggleAction
+            ? "User status updated successfully"
+            : "User created/edited successfully"
+        );
+        Show_Toast(response.status, true);
         handleCloseModal();
+        fetchUsers();
       } else {
-        console.error(isToggleAction ? "Error updating user status:" : "Error creating/editing user:", response.message);
+        console.error(
+          isToggleAction
+            ? "Error updating user status:"
+            : "Error creating/editing user:",
+          response.message
+        );
         Show_Toast(response.status);
       }
     } catch (error) {
-      console.error(isToggleAction ? "Error updating user status:" : "Error creating/editing user:", error);
+      console.error(
+        isToggleAction
+          ? "Error updating user status:"
+          : "Error creating/editing user:",
+        error
+      );
     }
   };
 
@@ -116,24 +126,27 @@ function UserDetails() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setData((prevData) => ({ ...prevData, [name]: value }));
+    setData((prevData) => ({
+      ...prevData,
+      [name]: name === "role" ? value.toLowerCase() : value,
+    }));
   };
 
   const toggleButton = async (userId) => {
-    console.log(userId)
     try {
-      const userToUpdate = users.find((user) => user._id === userId);
+      const userToUpdate = users.find((user) => user?._id === userId);
       if (userToUpdate) {
-        const updatedData = { ...userToUpdate, isActive: !userToUpdate.isActive };
-        console.log(updatedData+"udatedata")
+        const updatedData = {
+          ...userToUpdate,
+          isActive: !userToUpdate.isActive,
+        };
 
         const response = await ApiCall("put", `/users/${userId}`, updatedData);
 
         if (response.status) {
-          
           console.log("User status updated successfully");
           Show_Toast(response.status, true);
-         
+          fetchUsers();
         } else {
           console.error("Error updating user status:", response.message);
           Show_Toast(response.status, true);
@@ -142,14 +155,22 @@ function UserDetails() {
     } catch (error) {
       console.error("Error updating user status:", error);
     }
-    
   };
 
-// Filter users based on search term
-const filteredUsers = users.filter((user) =>
-user.username.toLowerCase().includes(searchTerm.toLowerCase())
-);
+  // Filter users based on search term
+  const filteredUsers = users.filter(
+    (user) =>
+      user &&
+      user.username &&
+      user.username.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
+  if (errors) {
+    return <p>Error: {errors}</p>;
+  }
   return (
     <>
       <div className="text-sm-end">
@@ -162,7 +183,7 @@ user.username.toLowerCase().includes(searchTerm.toLowerCase())
         </button>
       </div>
       <div>
-      <form className="nav-link mt-2 mt-md-0 d-none d-lg-flex search justify-content-end">
+        <form className="nav-link mt-2 mt-md-0 d-none d-lg-flex search justify-content-end">
           <input
             type="text"
             className="form-control"
@@ -181,54 +202,38 @@ user.username.toLowerCase().includes(searchTerm.toLowerCase())
               <table className="table table-striped">
                 <thead>
                   <tr>
+                    
+                    <th> Num </th>
                     <th> User ID </th>
                     <th>User Name </th>
                     <th> Active Type </th>
                     <th> Password</th>
-                    <th> Action </th>
+                    {/* <th> Action </th> */}
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredUsers.map((user) => (
-                    <tr key={user.id}>
+                  {filteredUsers.map((user,index) => (
+                    <tr key={user?._id}>
                       <td className="py-1">
-                        <img src={"../../assets/images/faces-clipart/pic-1.png"} alt="image" />
+                        {index+1}
+                        {/* <img class="img-xs rounded-circle " src="../../assets/images/faces/face15.jpg"/> */}
                       </td>
-                      <td>{user?.username || 'N/A'}</td>
+                      <td>{user?.userId}</td>
+                      <td>{user?.username || "N/A"}</td>
                       <td>
                         <div
                           className={`badge ${
-                            user && user.isActive ? "badge-outline-success" : "badge-outline-danger"
+                            user && user.isActive
+                              ? "badge-outline-success"
+                              : "badge-outline-danger"
                           }`}
                           onClick={() => toggleButton(user?._id)}
                         >
                           {user && user.isActive ? "Active" : "Inactive"}
                         </div>
                       </td>
-                      <td>{user?.password || 'N/A'}</td>
-                      <td>
-                        <div style={{ display: "flex", gap: "10px" }}>
-                          <i
-                            className="mdi mdi-lead-pencil"
-                            style={{
-                              fontSize: "1.5em",
-                              color: "#00d25b",
-                              cursor: "pointer",
-                              transition: "color 0.3s ease",
-                            }}
-                            onClick={() => handleOpenModal(user)}
-                          ></i>
-                          <i
-                            className="mdi mdi-delete-sweep"
-                            style={{
-                              color: "red",
-                              fontSize: "1.5em",
-                              cursor: "pointer",
-                              transition: "color 0.3s ease",
-                            }}
-                          ></i>
-                        </div>
-                      </td>
+                      <td>{user?.password || "N/A"}</td>
+                      {/* ... (existing JSX for actions) */}
                     </tr>
                   ))}
                 </tbody>
@@ -259,10 +264,10 @@ user.username.toLowerCase().includes(searchTerm.toLowerCase())
                 value={data?.username || ""}
                 onChange={handleInputChange}
                 aria-describedby="inputGroupPrepend"
-                // isInvalid={!!errors.username}
+                isInvalid={!!errors?.username}
               />
               <Form.Control.Feedback type="invalid">
-                {/* {errors.username} */}
+                {errors?.username}
               </Form.Control.Feedback>
             </InputGroup>
           </Form.Group>
@@ -278,10 +283,10 @@ user.username.toLowerCase().includes(searchTerm.toLowerCase())
                 value={data?.password || ""}
                 onChange={handleInputChange}
                 aria-describedby="inputGroupPrepend"
-                // isInvalid={!!errors.password}
+                isInvalid={!!errors?.password}
               />
               <Form.Control.Feedback type="invalid">
-                {/* {errors.password} */}
+                {errors?.password}
               </Form.Control.Feedback>
             </InputGroup>
           </Form.Group>
@@ -297,10 +302,10 @@ user.username.toLowerCase().includes(searchTerm.toLowerCase())
                 value={data?.role || ""}
                 onChange={handleInputChange}
                 aria-describedby="inputGroupPrepend"
-                // isInvalid={!!errors.role}
+                isInvalid={!!errors?.role}
               />
               <Form.Control.Feedback type="invalid">
-                {/* {errors.role} */}
+                {errors?.role}
               </Form.Control.Feedback>
             </InputGroup>
           </Form.Group>

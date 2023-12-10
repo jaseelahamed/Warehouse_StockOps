@@ -1,6 +1,18 @@
 import React from 'react'
+import { useAuth } from "../service/Context";
 
 function Header() {
+  const { setToken } = useAuth();
+
+  const handleLogout = () => {
+    console.log("logout")
+    // Remove the token from local storage
+    localStorage.removeItem("token");
+    
+    // Set the token in the context to null or undefined (depending on your implementation)
+    setToken(null);
+  };
+
   return (
       <>
 <nav className="navbar p-0 fixed-top d-flex flex-row">
@@ -169,15 +181,17 @@ function Header() {
             </div>
           </a>
           <div className="dropdown-divider" />
-          <a className="dropdown-item preview-item">
+          <a className="dropdown-item preview-item" onClick={handleLogout}>
             <div className="preview-thumbnail">
               <div className="preview-icon bg-dark rounded-circle">
                 <i className="mdi mdi-logout text-danger" />
               </div>
             </div>
-            <div className="preview-item-content">
-              <p className="preview-subject mb-1">Log out</p>
-            </div>
+            <div className="preview-item-content" >
+      <p className="preview-subject mb-1" >
+        Log out
+      </p>
+    </div>
           </a>
           <div className="dropdown-divider" />
           <p className="p-3 mb-0 text-center">Advanced settings</p>

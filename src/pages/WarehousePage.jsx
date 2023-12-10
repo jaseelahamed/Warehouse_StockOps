@@ -1,154 +1,207 @@
 import ModalForm from "../components/ModalForm";
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Button, Col, InputGroup } from "react-bootstrap";
 import { Show_Toast } from "../utils/Toast";
 import { ApiCall } from "../service/ApiCall";
+import { Link } from "react-router-dom";
 
 function WarehousePage() {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [data, setData] = useState({});
-    const [validated, setValidated] = useState(false);
-    const [errors, setErrors] = useState({});
-    const [warehouses, setWarehouses] = useState([]);
-  
-    useEffect(() => {
-        fetchWarehouses();
-      }, []);
-    
-      const fetchWarehouses = () => {
-        // Simulate an asynchronous API call with setTimeout
-        setTimeout(() => {
-          // Fake data for demonstration purposes
-          const fakeWarehouses = [
-            { id: 1, warehousename: "Warehouse 1", totalStock: 100, isActive: true },
-            { id: 2, warehousename: "Warehouse 2", totalStock: 150, isActive: false },
-            // Add more fake warehouses as needed
-          ];
-    
-          setWarehouses(fakeWarehouses);
-        }, 1000); // Simulating a 1-second delay
-      };
-    
-    const handleOpenModal = (warehouseId) => {
-      const selectedWarehouse = warehouses.find((warehouse) => warehouse.id === warehouseId) || { isActive: true };
-      setData(selectedWarehouse);
-      setIsModalOpen(true);
-    };
-  
-    const handleCloseModal = () => {
-      setIsModalOpen(false);
-    };
-  
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-      const form = e.currentTarget;
-      if (form.checkValidity() === false) {
-        e.stopPropagation();
-        setValidated(true);
-        return;
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [data, setData] = useState({});
+  const [validated, setValidated] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [warehouses, setWarehouses] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(true);
+  console.log(data);
+  useEffect(() => {
+    fetchWarehouses();
+  }, []);
+
+  const fetchWarehouses = async () => {
+    try {
+      setLoading(true);
+      const apiResponse = await ApiCall("GET", "/warehouses", null);
+
+      if (apiResponse.status === 200) {
+        setWarehouses(apiResponse.data.data);
+      } else {
+        setErrors(apiResponse.message || "Failed to fetch warehouses");
       }
-  
+    } catch (error) {
+      setErrors("Error fetching warehouses");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleOpenModal = (warehouseId) => {
+    const selectedWarehouse = warehouses.find(
+      (warehouse) => warehouse._id === warehouseId
+    ) || { isActive: true };
+    setData(selectedWarehouse);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    if (form.checkValidity() === false) {
+      e.stopPropagation();
       setValidated(true);
-  
-      const formErrors = validateForm(data);
-      if (Object.keys(formErrors).length > 0) {
-        setErrors(formErrors);
+      return;
+    }
+
+    setValidated(true);
+
+    const formErrors = validateForm(data);
+    if (Object.keys(formErrors).length > 0) {
+      setErrors(formErrors);
+      return;
+    }
+
+    try {
+      const endpoint = data._id ? `/warehouses/${data._id}` : "/warehouses";
+      const method = data._id ? "put" : "post";
+
+      const response = await ApiCall(method, endpoint, data);
+
+      if (response.status) {
+        console.log("Warehouse Created/Edited Successfully");
+        Show_Toast(response.status, true);
+        fetchWarehouses();
+        handleCloseModal();
+      } else {
+        console.error("Error creating/editing warehouse:", response.message);
+        Show_Toast(response.status, false);
+      }
+    } catch (error) {
+      console.error("Error creating/editing warehouse:", error);
+    }
+  };
+
+  const validateForm = (formData) => {
+    const errors = {};
+
+    if (!formData.warehousename) {
+      errors.warehousename = "Warehouse Name is required";
+    }
+
+    return errors;
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setData({ ...data, [name]: value });
+  };
+
+  const toggleButton = async (warehouseId) => {
+    try {
+      if (!warehouseId) {
+        console.error("Invalid warehouseId");
         return;
       }
-  
-      try {
-        const endpoint = data.id ? `/edit/${data.id}` : "/register";
-        const method = data.id ? "put" : "post";
-  
-        const response = await ApiCall(method, endpoint, data);
-  
-        if (response.status) {
-          console.log("Warehouse Created/Edited Successfully");
-          Show_Toast(response.status);
-          // Update the warehouse list or fetch the updated data from the server
-          // Example: fetchWarehouses();
-          handleCloseModal();
-        } else {
-          console.error("Error creating/editing warehouse:", response.message);
-          Show_Toast(response.status);
-        }
-      } catch (error) {
-        console.error("Error creating/editing warehouse:", error);
-      }
-    };
-  
-    const validateForm = (formData) => {
-      const errors = {};
-  
-      if (!formData.warehousename) {
-        errors.warehousename = "Warehouse Name is required";
-      }
-  
-      // Add validation for other form fields if needed
-  
-      return errors;
-    };
-  
-    const handleInputChange = (e) => {
-      const { name, value } = e.target;
-      setData({ ...data, [name]: value });
-    };
-  
-    const toggleButton = async (warehouseId) => {
-      try {
-        const warehouseToUpdate = warehouses.find((warehouse) => warehouse.id === warehouseId);
-        const updatedData = { ...warehouseToUpdate, isActive: !warehouseToUpdate.isActive };
-  
-        const response = await ApiCall("put", `/updateStatus/${warehouseId}`, updatedData);
-  
+
+      const warehouseToUpdate = warehouses.find(
+        (warehouse) => warehouse?._id === warehouseId
+      );
+
+      if (warehouseToUpdate) {
+        const updatedData = {
+          ...warehouseToUpdate,
+          isActive: !warehouseToUpdate.isActive,
+        };
+
+        const response = await ApiCall(
+          "put",
+          `/warehouses/${warehouseId}`,
+          updatedData
+        );
+
         if (response.status) {
           console.log("Warehouse status updated successfully");
-          Show_Toast(response.status);
-          // Update the warehouse list or fetch the updated data from the server
-          // Example: fetchWarehouses();
+          Show_Toast(response.status, true);
+          fetchWarehouses();
         } else {
           console.error("Error updating warehouse status:", response.message);
           Show_Toast(response.status);
         }
-      } catch (error) {
-        console.error("Error updating warehouse status:", error);
+      } else {
+        console.error("Warehouse not found for the given ID:", warehouseId);
       }
-    };
+    } catch (error) {
+      console.error("Error updating warehouse status:", error);
+    }
+  };
+
+  // const Singlewarehouse = async (warehouseId) => {
+  //   try {
+  //     const response = await ApiCall("GET", `/stocks/${warehouseId}`, null);
+
+  //     if (response.status === 200) {
+  //       console.log("Warehouse details:", response.data);
+  //     } else {
+  //       console.error("Error fetching warehouse details:", response.message);
+  //       Show_Toast(response.status);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching warehouse details:", error);
+  //   }
+  // };
+
+  const filteredWarehouses = warehouses.filter(
+    (warehouse) =>
+      warehouse &&
+      warehouse.warehousename &&
+      warehouse.warehousename.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <>
-      <div className="text-sm-end">
+      <div className="text-sm-end mt-3">
         <button
           type="button"
           className="btn btn-success btn-rounded waves-effect waves-light mb-2 me-2"
-          style={{
-            transition: "transform 0.3s ease ",
-            ":hover": {
-              transform: "scale(1.1) rotate(10deg)", // Increase size and add a slight rotation
-            },
-          }}
           onClick={handleOpenModal}
+          style={{
+            backgroundColor: "#00d25b",
+            borderColor: "#00d25b",
+            transition: "background-color 0.3s ease",
+          }}
         >
-          <i class="mdi mdi-account-plus"></i> Add New Warehouse
+          <i className="mdi mdi-account-plus"></i> Add New Warehouse
         </button>
       </div>
-      <div>
-        <form className="nav-link mt-2 mt-md-0 d-none d-lg-flex search justify-content-end">
+      <div className="mt-2 mt-md-0 d-none d-lg-flex justify-content-end">
+        <form className="nav-link search" style={{ width: "500px" }}>
           <input
             type="text"
             className="form-control"
             placeholder="Search Warehouse"
-            style={{ width: "500px" }} // Adjust the width as needed
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            style={{
+              borderRadius: "5px",
+              marginRight: "10px",
+              transition: "box-shadow 0.3s ease",
+            }}
           />
         </form>
       </div>
-      <div className="row ">
+      <div className="row mt-3">
         <div className="col-12 grid-margin">
           <div className="card">
             <div className="card-body">
-              <h4 className="card-title">Warehouse List</h4>
+              <h4 className="card-title" style={{ color: "#00d25b" }}>
+                Warehouse List
+              </h4>
               <div className="table-responsive">
                 <table className="table">
-                  <thead>
+                  <thead style={{ backgroundColor: "", color: "white" }}>
                     <tr>
                       <th> Warehouse ID </th>
                       <th> Warehouse Name </th>
@@ -156,14 +209,25 @@ function WarehousePage() {
                       <th> Active or Not </th>
                     </tr>
                   </thead>
-                  {warehouses.map((warehouse) => (
-                      <tr key={warehouse.id}>
-                        <td>{warehouse.id}</td>
+                  <tbody>
+                    {filteredWarehouses.map((warehouse, index) => (
+                      <tr
+                        key={warehouse._id}
+                        style={{ transition: "background-color 0.3s ease" }}
+                      >
+                        <td>{index + 1}</td>
                         <td>
-                          <img src="assets/images/faces/face5.jpg" alt="image" />
-                          <span className="pl-2">{warehouse.warehousename}</span>
+                          <span className="pl-2">
+                            {warehouse.warehousename}
+                          </span>
                         </td>
-                        <td>{warehouse.totalStock}</td>
+                        <Link to={`/singlewarhouse/${warehouse._id}`}>
+                          {" "}
+                          <td>
+                            View more
+                          </td>
+                        </Link>
+
                         <td>
                           <div
                             className={`badge ${
@@ -171,7 +235,11 @@ function WarehousePage() {
                                 ? "badge-outline-success"
                                 : "badge-outline-danger"
                             }`}
-                            onClick={() => toggleButton(warehouse.id)}
+                            onClick={() => toggleButton(warehouse._id)}
+                            style={{
+                              cursor: "pointer",
+                              transition: "background-color 0.3s ease",
+                            }}
                           >
                             {warehouse.isActive ? "Active" : "Inactive"}
                           </div>
@@ -186,9 +254,9 @@ function WarehousePage() {
                                 cursor: "pointer",
                                 transition: "color 0.3s ease",
                               }}
-                              onClick={() => handleOpenModal(warehouse.id)}
+                              onClick={() => handleOpenModal(warehouse._id)}
                             ></i>
-                            <i
+                            {/* <i
                               className="mdi mdi-delete-sweep"
                               style={{
                                 color: "red",
@@ -196,18 +264,18 @@ function WarehousePage() {
                                 cursor: "pointer",
                                 transition: "color 0.3s ease",
                               }}
-                            ></i>
+                            ></i> */}
                           </div>
                         </td>
                       </tr>
                     ))}
+                  </tbody>
                 </table>
               </div>
             </div>
           </div>
         </div>
       </div>
-
       <ModalForm
         show={isModalOpen}
         onHide={handleCloseModal}
@@ -225,20 +293,17 @@ function WarehousePage() {
                 required
                 type="text"
                 placeholder="Enter Warehouse Name"
-                name="Warehouse Name"
+                name="warehousename"
                 value={data?.warehousename ?? ""}
                 onChange={handleInputChange}
                 aria-describedby="inputGroupPrepend"
                 isInvalid={!!errors.warehousename}
               />
               <Form.Control.Feedback type="invalid">
-                {errors.username}
+                {errors.warehousename}
               </Form.Control.Feedback>
             </InputGroup>
           </Form.Group>
-
-
-          
 
           <div className="d-flex justify-content-end mt-4">
             <Button
