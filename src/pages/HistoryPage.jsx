@@ -3,6 +3,9 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ApiCall } from "../service/ApiCall";
 import ModalForm from "../components/ModalForm";
+import { Button } from "react-bootstrap";
+import { writeFile } from "xlsx";
+import * as XLSX from "xlsx";
 
 function HistoryPage() {
   const [history, setHistory] = useState([]);
@@ -63,8 +66,40 @@ function HistoryPage() {
     return new Date(timestamp).toLocaleString('en-US', options);
   };
 
+
+  const exportToExcel = () => {
+    const data = history.map((item, index) => ({
+      SI: index + 1,
+      sourceWarehouse:
+        item?.sourceWarehouse?.warehousename || "Warehouse Removed",
+      destinationWarehouse:
+        item?.destinationWarehouse?.warehousename || "Warehouse Removed",
+      products: item.products
+        .map((product) => product.product.productname)
+        .join(", "),
+      user: item.userId.username,
+      timestamp: new Date(item.timestamp).toLocaleString(),
+    }));
+
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "MovementHistory");
+    const excelFileName = "movement_history.xlsx";
+    writeFile(wb, excelFileName);
+  };
+
   return (
     <>
+       <button
+        type="button"
+        className="btn btn-success btn-rounded waves-effect waves-light mb-2 me-2"
+        onClick={exportToExcel}>
+        <i class="mdi mdi-file-excel"></i>
+            Export to Excel
+        </button>
+      {/* <Button style={{backgroundColor: "#00d25b" }} onClick={exportToExcel} className="mb-3">
+                Export to Excel
+              </Button> */}
       <div>
         <form className="nav-link mt-2 mt-md-0 d-none d-lg-flex search justify-content-end">
           {/* <input

@@ -89,6 +89,7 @@ function StockPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(data)
     const form = e.currentTarget;
     if (form.checkValidity() === false) {
       e.stopPropagation();
@@ -142,9 +143,18 @@ function StockPage() {
     return errors;
   };
 
+  // const handleInputChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setData({ ...data, [name]: value });
+  // };
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setData({ ...data, [name]: value });
+    if (value) {
+      setData({ ...data, [name]: value,warehouse: warehouses.find((item)=>item.warehousename==='Godown')._id });
+      console.log('Updated Data:', data);
+    }
+    // setData({ ...data, warehouse: warehouses.find((item)=>item.warehousename==='Godown')._id });
+
   };
 
   const toggleButton = async (stocksId) => {
@@ -218,7 +228,10 @@ function StockPage() {
             transition: "background-color 0.3s ease",
           }}
         >
-          <i className="mdi mdi-account-plus"></i> Add New Stock
+           {/* <i className="mdi mdi-account-plus">
+          </i>  */}
+             <i class="mdi mdi-table-column-plus-after"></i>
+          Add New Stock 
         </button>
 
         <Form.Group as={Col} controlId="validationCustom05">
@@ -228,13 +241,13 @@ function StockPage() {
             value={selectedWarehouse}
             onChange={(e) => setSelectedWarehouse(e.target.value)}
             style={{
-              width: "300px",
+              width: "150px",
               borderRadius: "5px",
               marginRight: "10px",
               transition: "box-shadow 0.3s ease",
             }}
           >
-            <option value="">All Warehouses</option>
+            <option value="" >All Warehouses</option>
             {warehouses &&
               warehouses.map((warehouse) => (
                 <option key={warehouse._id} value={warehouse._id}>
@@ -335,29 +348,7 @@ function StockPage() {
               {errors.product}
             </Form.Control.Feedback>
           </Form.Group>
-
-          <Form.Group as={Col} controlId="validationCustom03">
-            <Form.Label className="mb-1">Warehouse</Form.Label>
-            <Form.Control
-              as="select"
-              name="warehouse"
-              value={data?.warehouse?._id }
-              onChange={handleInputChange}
-              required
-              isInvalid={!!errors.warehouse}
-            >
-              <option value="" disabled>Select a warehouse</option>
-              {warehouses &&
-                warehouses.map((warehouse) => (
-                  <option key={warehouse._id} value={warehouse._id}>
-                    {warehouse.warehousename}
-                  </option>
-                ))}
-            </Form.Control>
-            <Form.Control.Feedback type="invalid">
-              {errors.warehouse}
-            </Form.Control.Feedback>
-          </Form.Group>
+      
 
           <Form.Group as={Col} controlId="validationCustom04">
             <Form.Label className="mb-1">Quantity</Form.Label>

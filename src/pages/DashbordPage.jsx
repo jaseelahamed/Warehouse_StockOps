@@ -42,7 +42,7 @@ function DashbordPage() {
       console.log("response", response);
   
       // Assuming response.data is an array and you want to sort it based on a specific property
-      const sortedData = response?.data.sort((a, b) => a.someProperty - b.someProperty);
+      const sortedData = response?.data.sort((a, b) => b.totalStock - a.totalStock);
   
       setChartdata(sortedData);
   
@@ -51,9 +51,44 @@ function DashbordPage() {
     }
   };
  
+  const colors = [
+    
+ 
+    'rgba(54,162,235,0.6)',
+ 
+    'rgba(153,102,255,0.6)',
+    'rgba(75,192,192,0.6)',
+    'rgba(255,99,132,0.6)',
+    
+  ];
+  const data = {
+    labels: chartdata?.map(item => item?.warehouse),
+    datasets: [
+      {
+        label: 'Total Stock',
+        data: chartdata?.map(item => item?.totalStock),
+        backgroundColor: colors, 
+        borderColor: colors, 
+        borderWidth: 1,
+        barThickness : barWidth 
+      },
+    ],
+  };
+  const options = {
+    scales: {
+      x: {
+        barPercentage: 0.9, 
+        categoryPercentage: 0.8, 
+      },
+    },
+  };
+
   useEffect(() => {
     dashboarddata();
   }, []);
+  console.log(chartdata);
+  
+
 
 
   const chartRef = useRef(null);
@@ -122,6 +157,10 @@ function DashbordPage() {
      
       
       <Container>
+        
+        <Bar data={data} options={options}>
+          
+       </Bar>
       <div class="row">
       {chartdata.map((chartData) => (
         <div key={chartData._id} className="col-sm-4 grid-margin">

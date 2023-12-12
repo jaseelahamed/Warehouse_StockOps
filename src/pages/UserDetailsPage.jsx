@@ -12,7 +12,7 @@ function UserDetails() {
   const [errors, setErrors] = useState(null);
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  
+  console.log(data)
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -47,6 +47,7 @@ function UserDetails() {
   };
 
   const handleSubmit = async (e, isToggleAction) => {
+    console.log("formdata",data)
     e.preventDefault();
     const form = e.currentTarget;
     if (form.checkValidity() === false) {
@@ -125,11 +126,15 @@ function UserDetails() {
   };
 
   const handleInputChange = (e) => {
+    // console.log(e)
     const { name, value } = e.target;
+    
     setData((prevData) => ({
+      
       ...prevData,
       [name]: name === "role" ? value.toLowerCase() : value,
     }));
+ 
   };
 
   const toggleButton = async (userId) => {
@@ -277,7 +282,7 @@ function UserDetails() {
             <InputGroup hasValidation>
               <Form.Control
                 required
-                type="password"
+                type="text"
                 placeholder="Enter password"
                 name="password"
                 value={data?.password || ""}

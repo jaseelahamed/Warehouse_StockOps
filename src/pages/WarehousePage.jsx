@@ -221,12 +221,21 @@ function WarehousePage() {
                             {warehouse.warehousename}
                           </span>
                         </td>
-                        <Link to={`/singlewarhouse/${warehouse._id}`}>
-                          {" "}
-                          <td>
-                            View more
-                          </td>
-                        </Link>
+                        <Link
+  to={`/singlewarhouse/${warehouse._id}`}
+  style={{
+    textDecoration: 'none',
+    color: 'rgba(153,102,255,0.6)',
+    transition: 'transform 0.3s',
+    display: 'inline-block', // Ensures inline display
+  }}
+  onMouseOver={(e) => (e.target.style.transform = 'translateY(-2px)')}
+  onMouseOut={(e) => (e.target.style.transform = 'translateY(0)')}
+>
+  <td>
+    View more
+  </td>
+</Link>
 
                         <td>
                           <div

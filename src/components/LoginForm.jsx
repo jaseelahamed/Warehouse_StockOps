@@ -13,7 +13,7 @@ function LoginForm() {
      username: "",
     password: "",
   });
-
+console.log("formdata",formData)
   const [errors, setErrors] = useState({});
 
   const handleInputChange = (e) => {
@@ -98,7 +98,7 @@ function LoginForm() {
                   <div className="form-group">
                     <label>Password *</label>
                     <input
-                      type="password"
+                      type="text"
                       className={`form-control p_input ${
                         errors.password ? "is-invalid" : ""
                       }`}
