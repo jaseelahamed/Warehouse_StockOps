@@ -45,9 +45,7 @@ function LeftSideBar() {
                   <span>Gold Member</span>
                 </div>
               </div>
-              <a href="#" id="profile-dropdown" data-toggle="dropdown">
-                <i className="mdi mdi-dots-vertical" />
-              </a>
+         
               <div
                 className="dropdown-menu dropdown-menu-right sidebar-dropdown preview-list"
                 aria-labelledby="profile-dropdown"
@@ -221,7 +219,7 @@ function LeftSideBar() {
           <li className="nav-item menu-items">
             <Link className="nav-link" to={Return}>
               <span className="menu-icon">
-              <i class="mdi mdi-heart-broken"  style={{
+              <i class="mdi mdi-sync"  style={{
                             fontSize: "1.5em",
                             color: "red",
                             cursor: "pointer",

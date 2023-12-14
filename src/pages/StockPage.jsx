@@ -89,7 +89,7 @@ function StockPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(data)
+    console.log(data);
     const form = e.currentTarget;
     if (form.checkValidity() === false) {
       e.stopPropagation();
@@ -113,12 +113,12 @@ function StockPage() {
 
       if (response.status) {
         console.log("Stock created/edited successfully");
-        Show_Toast(response.status, true);
+        Show_Toast(response.message, true);
         fetchStocks();
         handleCloseModal();
       } else {
         console.error("Error creating/editing stock:", response.message);
-        Show_Toast(response.status);
+        Show_Toast(response.message,false);
       }
     } catch (error) {
       console.error("Error creating/editing stock:", error);
@@ -136,9 +136,9 @@ function StockPage() {
       errors.warehouse = "Warehouse is required";
     }
 
-    if (formData.quantity <= 0) {
-      errors.quantity = "Quantity must be greater than 0";
-    }
+    // if (formData.quantity <= 0) {
+    //   errors.quantity = "Quantity must be greater than 0";
+    // }
 
     return errors;
   };
@@ -150,11 +150,15 @@ function StockPage() {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     if (value) {
-      setData({ ...data, [name]: value,warehouse: warehouses.find((item)=>item.warehousename==='Godown')._id });
-      console.log('Updated Data:', data);
+      setData({
+        ...data,
+        [name]: value,
+        warehouse: warehouses.find((item) => item.warehousename === "Godown")
+          ._id,
+      });
+      console.log("Updated Data:", data);
     }
     // setData({ ...data, warehouse: warehouses.find((item)=>item.warehousename==='Godown')._id });
-
   };
 
   const toggleButton = async (stocksId) => {
@@ -172,7 +176,11 @@ function StockPage() {
           isActive: !stockToUpdate.isActive,
         };
 
-        const response = await ApiCall("put", `/stocks/${stocksId}`, updatedData);
+        const response = await ApiCall(
+          "put",
+          `/stocks/${stocksId}`,
+          updatedData
+        );
 
         if (response.status) {
           console.log("Stock status updated successfully");
@@ -195,7 +203,9 @@ function StockPage() {
       stock &&
       stock.product &&
       stock.product.productname &&
-      stock.product.productname.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      stock.product.productname
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) &&
       (selectedWarehouse === "" || stock.warehouse._id === selectedWarehouse)
   );
 
@@ -217,7 +227,7 @@ function StockPage() {
 
   return (
     <>
-       <div className="text-sm-end mt-3">
+      <div className="text-sm-end mt-3">
         <button
           type="button"
           className="btn btn-success btn-rounded waves-effect waves-light mb-2 me-2"
@@ -228,10 +238,10 @@ function StockPage() {
             transition: "background-color 0.3s ease",
           }}
         >
-           {/* <i className="mdi mdi-account-plus">
+          {/* <i className="mdi mdi-account-plus">
           </i>  */}
-             <i class="mdi mdi-table-column-plus-after"></i>
-          Add New Stock 
+          <i class="mdi mdi-table-column-plus-after"></i>
+          Add New Stock
         </button>
 
         <Form.Group as={Col} controlId="validationCustom05">
@@ -247,7 +257,7 @@ function StockPage() {
               transition: "box-shadow 0.3s ease",
             }}
           >
-            <option value="" >All Warehouses</option>
+            <option value="">All Warehouses</option>
             {warehouses &&
               warehouses.map((warehouse) => (
                 <option key={warehouse._id} value={warehouse._id}>
@@ -270,12 +280,16 @@ function StockPage() {
       </div>
 
       <div>
-        <form className="nav-link mt-2 mt-md-0 d-none d-lg-flex search justify-content-end">
+        <form className="nav-link mt-2 mt-md-0 d-none d-lg-flex search justify-content-end"  style={{  marginRight: "-20px"  }}>
           <input
             type="text"
             className="form-control"
             placeholder="Search Stocks"
-            style={{ width: "500px", borderRadius: "5px", transition: "box-shadow 0.3s ease" }}
+            style={{
+              width: "500px",
+              borderRadius: "5px",
+              transition: "box-shadow 0.3s ease",
+            }}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -286,7 +300,9 @@ function StockPage() {
         <div className="col-12 grid-margin">
           <div className="card">
             <div className="card-body">
-              <h4 className="card-title" style={{ color: "#00d25b" }}>Stocks List</h4>
+              <h4 className="card-title" style={{ color: "#00d25b" }}>
+                Stocks List
+              </h4>
               <div className="table-responsive">
                 <table className="table">
                   <thead style={{ backgroundColor: "", color: "white" }}>
@@ -325,18 +341,24 @@ function StockPage() {
         onHide={handleCloseModal}
         title="Stock Registration Form"
       >
-        <Form noValidate validated={validated} onSubmit={(e) => handleSubmit(e)}>
+        <Form
+          noValidate
+          validated={validated}
+          onSubmit={(e) => handleSubmit(e)}
+        >
           <Form.Group as={Col} controlId="validationCustom02">
             <Form.Label className="mb-1">Product</Form.Label>
             <Form.Control
               as="select"
               name="product"
-              value={data?.product?._id }
+              value={data?.product?._id}
               onChange={handleInputChange}
               required
               isInvalid={!!errors.product}
             >
-              <option value="" disabled>Select a product</option>
+              <option value="" disabled>
+                Select a product
+              </option>
               {products &&
                 products.map((product) => (
                   <option key={product._id} value={product._id}>
@@ -348,7 +370,6 @@ function StockPage() {
               {errors.product}
             </Form.Control.Feedback>
           </Form.Group>
-      
 
           <Form.Group as={Col} controlId="validationCustom04">
             <Form.Label className="mb-1">Quantity</Form.Label>

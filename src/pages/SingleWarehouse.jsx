@@ -19,7 +19,7 @@ function SingleWarehouse() {
             );
       } else {
         console.error('Error fetching warehouse details:', response.message);
-        Show_Toast(response.status);
+        Show_Toast(response.message,false);
       }
     } catch (error) {
       console.error('Error fetching warehouse details:', error);

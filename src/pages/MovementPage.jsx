@@ -3,11 +3,17 @@ import { ApiCall } from "../service/ApiCall";
 import { Show_Toast } from "../utils/Toast";
 import { useAuth } from "../service/Context";
 import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
+import { Stocks } from "../utils/Path_Url";
 
 function MovementPage() {
+  const navigate =useNavigate()
   const { token } = useAuth();
+  console
   const decoded = jwtDecode(token);
+  console.log(decoded,"tokanuserid")
   const userId = decoded.userId;
+  console.log(userId,"userid from token")
 
   const [formData, setFormData] = useState({
     sourceWarehouse: "",
@@ -125,10 +131,11 @@ function MovementPage() {
     try {
       const response = await ApiCall("POST", "/movements", formData);
       console.log("API response:", response.data);
-      Show_Toast(response.status, true);
+      Show_Toast(response.message, true);
+      navigate(Stocks)
     } catch (error) {
       console.error("Error making API call:", error);
-      Show_Toast(error.response.status, false);
+      Show_Toast(error.response.message, false);
     }
   };
 
@@ -151,8 +158,8 @@ function MovementPage() {
   };
   return (
     <>
-      <div className="container mt-5">
-        <h1
+<div className="container mt-5">      
+        {/* <h1
           className="mb-4"
           style={{
             fontFamily: "YourCustomFont",
@@ -163,46 +170,75 @@ function MovementPage() {
           }}
         >
           Move Products
-        </h1>
-
+        </h1> */}
+<h1
+  className="mb-4"
+  style={{
+    fontFamily: "YourCustomFont",
+    color: "white",
+    fontSize: "3em",
+    fontWeight: "bold",
+    textShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",
+    textAlign: "center",
+    marginTop: "50px",
+    borderBottom: "2px solid #5fe398", // Add an underline
+    paddingBottom: "20px", // Add some padding to space out the underline
+    borderBottomWidth: "1px", // Reduce the width of the underline
+    borderBottomHight: "5px", // Reduce the width of the underline
+  }}
+>
+  Move Stocks
+</h1>
         <div className="col-md-12">
-          <form onSubmit={handleMoveProductSubmit}>
+        <div style={{
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  // minHeight: "100vh",
+}}>
+          <form onSubmit={handleMoveProductSubmit}  style={{ width: "600px" }}>
             {/* From and To Address */}
             <div className="mb-3 row">
-              <div className="col-md-6">
-                <label htmlFor="sourceWarehouse" className="form-label">
-                  From Address:
-                </label>
-                <select
-                  className="form-select"
-                  id="sourceWarehouse"
-                  name="sourceWarehouse"
-                  value={formData.sourceWarehouse}
-                  onChange={handleChange}
-                  style={{
-                    width: "100%",
-                    height: "50px",
-                    borderRadius: "10px",
-                    boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
-                  }}
-                >
-                  <option value="" disabled>
-                    Select From Address
-                  </option>
-                  {uniqueWarehouses.map((warehouse, index) => (
-                    <option key={index} value={warehouse.warehouse._id}>
-                      {warehouse.warehouse.warehousename}
-                    </option>
-                  ))}
-                </select>
-              </div>
+            <div className="form-group" style={{ marginBottom: "20px", position: "relative" ,width:"600px"}}>
+  <label htmlFor="sourceWarehouse" className="form-label" style={{ color: "white", fontSize: "1.2em", marginBottom: "10px" }}>
+    From Address:
+  </label>
+  <select
+    className="form-control "
+    id="sourceWarehouse"
+    name="sourceWarehouse"
+    value={formData.sourceWarehouse}
+    onChange={handleChange}
+    style={{
+      width: "100%",
+      height: "50px",
+      borderRadius: "10px",
+      // boxShadow: "0 0 10px rgba(153,102,255,0.6)",
+ 
+      outline: "none",
+      // paddingLeft: "10px",
+      color: "white",
 
-              <div className="col-md-6">
-                <label htmlFor="destinationWarehouse" className="form-label">
+    }}
+  >
+    <option value="" disabled>
+      Select From Address
+    </option>
+    {uniqueWarehouses.map((warehouse, index) => (
+      <option key={index} value={warehouse.warehouse._id}>
+        {warehouse.warehouse.warehousename}
+      </option>
+    ))}
+  </select>
+</div>
+
+
+              <div className="form-group" style={{ marginBottom: "20px", position: "relative" ,width:"600px"}}>
+                <label htmlFor="destinationWarehouse" className="form-label" style={{ color: "white", fontSize: "1.2em", marginBottom: "10px" }}>
                   To Address:
                 </label>
                 <select
-                  className="form-select"
+                  className="form-control"
                   id="destinationWarehouse"
                   name="destinationWarehouse"
                   value={formData.destinationWarehouse}
@@ -211,7 +247,12 @@ function MovementPage() {
                     width: "100%",
                     height: "50px",
                     borderRadius: "10px",
-                    boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+                    // boxShadow: "0 0 10px rgba(153,102,255,0.6)",
+               
+                    outline: "none",
+                    // paddingLeft: "10px",
+                    color: "white",
+              
                   }}
                 >
                   <option value="" disabled>
@@ -227,34 +268,39 @@ function MovementPage() {
             </div>
 
             {/* Movement Type */}
-            <div className="mb-3">
-              <label htmlFor="movementType" className="form-label">
-                Movement Type:
-              </label>
-              <select
-                className="form-select"
-                id="movementType"
-                name="movementType"
-                value={formData.movementType}
-                onChange={handleChange}
-                style={{
-                  width: "100%",
-                  height: "50px",
-                  borderRadius: "10px",
-                  boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
-                }}
-              >
-                <option value="" disabled>
-                  Select Movement Type
-                </option>
-                <option value="Transfer">Transfer</option>
-                <option value="Return">Return</option>
-              </select>
-            </div>
+            <div className="form-group" style={{ marginBottom: "20px", position: "relative",width:"200px" }}>
+  <label htmlFor="movementType" className="form-label" style={{ color: "white", fontSize: "1.2em", marginBottom: "10px" }}>
+    Movement Type:
+  </label>
+  <select
+    className="form-control"
+    id="movementType"
+    name="movementType"
+    value={formData.movementType}
+    onChange={handleChange}
+    style={{
+      width: "100%",
+      height: "50px",
+      borderRadius: "10px",
+      // boxShadow: "0 0 10px rgba(153,102,255,0.6)",
+ 
+      outline: "none",
+      // paddingLeft: "10px",
+      color: "white",
+
+    }}
+  >
+    <option value="" disabled>
+      Select Movement Type
+    </option>
+    <option value="Transfer">Transfer</option>
+    <option value="Return">Return</option>
+  </select>
+</div>
 
           {/* Products */}
 <div className="mb-3">
-  <label htmlFor="products" className="form-label">
+  <label htmlFor="products" className="form-label" style={{ color: "white", fontSize: "1.2em", marginBottom: "10px" }}>
     Products:
   </label>
   <div
@@ -310,26 +356,28 @@ function MovementPage() {
               type="submit"
               className="btn btn-primary"
               style={{
-                backgroundColor: "#00d25b",
+                backgroundColor: "#5fe398",
                 color: "#fff",
                 padding: "10px 20px",
                 borderRadius: "5px",
                 transition: "background-color 0.3s ease, transform 0.2s ease",
                 cursor: "pointer",
                 marginTop: "10px",
+                width: "100%", // Make the button full width
               }}
               onMouseEnter={(e) => {
-                e.target.style.backgroundColor = "#46b877";
+                e.target.style.backgroundColor = "#00d25b";
                 e.target.style.transform = "scale(1.1)";
               }}
               onMouseLeave={(e) => {
-                e.target.style.backgroundColor = "#00d25b";
+                e.target.style.backgroundColor = "#5fe398";
                 e.target.style.transform = "scale(1)";
               }}
             >
               Submit
             </button>
-          </form>
+            </form>
+            </div>
         </div>
       </div>
     </>

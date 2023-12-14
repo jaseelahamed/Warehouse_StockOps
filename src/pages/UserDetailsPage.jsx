@@ -85,7 +85,7 @@ function UserDetails() {
             ? "User status updated successfully"
             : "User created/edited successfully"
         );
-        Show_Toast(response.status, true);
+        Show_Toast(response.message, true);
         handleCloseModal();
         fetchUsers();
       } else {
@@ -95,7 +95,7 @@ function UserDetails() {
             : "Error creating/editing user:",
           response.message
         );
-        Show_Toast(response.status);
+        Show_Toast(response.message,false);
       }
     } catch (error) {
       console.error(
@@ -118,23 +118,31 @@ function UserDetails() {
       errors.password = "Password is required";
     }
 
-    if (!formData || !formData.role) {
-      errors.role = "Role is required";
-    }
+    // if (!formData || !formData.role) {
+    //   errors.role = "Role is required";
+    // }
 
     return errors;
   };
 
+  // const handleInputChange = (e) => {
+    
+  //   const { name, value } = e.target;
+    
+  //   setData((prevData) => ({
+      
+  //     ...prevData,
+  //     [name]: name === "role" ? value.toLowerCase() : value,
+  //   }));
+ 
+  // };
   const handleInputChange = (e) => {
-    // console.log(e)
     const { name, value } = e.target;
     
     setData((prevData) => ({
-      
       ...prevData,
-      [name]: name === "role" ? value.toLowerCase() : value,
+      [name]: value,
     }));
- 
   };
 
   const toggleButton = async (userId) => {
@@ -150,11 +158,11 @@ function UserDetails() {
 
         if (response.status) {
           console.log("User status updated successfully");
-          Show_Toast(response.status, true);
+          Show_Toast(response.message, true);
           fetchUsers();
         } else {
           console.error("Error updating user status:", response.message);
-          Show_Toast(response.status, true);
+          Show_Toast(response.message, true);
         }
       }
     } catch (error) {
@@ -188,12 +196,19 @@ function UserDetails() {
         </button>
       </div>
       <div>
-        <form className="nav-link mt-2 mt-md-0 d-none d-lg-flex search justify-content-end">
+        <form className="nav-link mt-2 mt-md-0 d-none d-lg-flex search justify-content-end"  style={{  marginBottom: "10px" }} >
           <input
             type="text"
             className="form-control"
             placeholder="Search User"
-            style={{ width: "500px" }}
+            style={{
+              width: "500px",
+              borderRadius: "5px",
+              // marginRight: "200px",
+              transition: "box-shadow 0.3s ease",
+          
+          
+            }}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -296,7 +311,7 @@ function UserDetails() {
             </InputGroup>
           </Form.Group>
 
-          <Form.Group className="mb-3" as={Col} controlId="validationCustom03">
+          {/* <Form.Group className="mb-3" as={Col} controlId="validationCustom03">
             <Form.Label className="mb-1 mt-4">Role</Form.Label>
             <InputGroup hasValidation>
               <Form.Control
@@ -313,7 +328,7 @@ function UserDetails() {
                 {errors?.role}
               </Form.Control.Feedback>
             </InputGroup>
-          </Form.Group>
+          </Form.Group> */}
 
           <div className="d-flex justify-content-end mt-4">
             <Button

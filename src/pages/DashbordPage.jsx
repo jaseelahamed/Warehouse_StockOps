@@ -124,11 +124,13 @@ function DashbordPage() {
       try {
         const response = await ApiCall('POST', '/products', {
          productname,
-         productid ,
+        
         });
+        console.log(response)
 
         if (response.status === 200) {
-          Show_Toast(response.message,true,);
+          Show_Toast(response.message, true,);
+          setProductname('')
           // Additional logic after successful API call
         } else {
           Show_Toast('Failed to add product:', response.message,false);
@@ -248,7 +250,7 @@ function DashbordPage() {
             </InputGroup>
           </Form.Group>
 
-          <Form.Group className="mb-3" as={Col} controlId="validationCustom02">
+          {/* <Form.Group className="mb-3" as={Col} controlId="validationCustom02">
             <Form.Label className="mb-1 mt-4">Product ID</Form.Label>
             <InputGroup hasValidation>
               <Form.Control
@@ -264,7 +266,7 @@ function DashbordPage() {
                 Please enter a product ID.
               </Form.Control.Feedback>
             </InputGroup>
-          </Form.Group>
+          </Form.Group> */}
 
           <div className="d-flex justify-content-end mt-4">
             <Button

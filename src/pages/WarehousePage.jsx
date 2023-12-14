@@ -73,6 +73,7 @@ function WarehousePage() {
       if (response.status) {
         console.log("Warehouse Created/Edited Successfully");
         Show_Toast(response.status, true);
+        setData('')
         fetchWarehouses();
         handleCloseModal();
       } else {
@@ -124,11 +125,12 @@ function WarehousePage() {
 
         if (response.status) {
           console.log("Warehouse status updated successfully");
-          Show_Toast(response.status, true);
+          Show_Toast(response.message, true);
+          setData('')
           fetchWarehouses();
         } else {
           console.error("Error updating warehouse status:", response.message);
-          Show_Toast(response.status);
+          Show_Toast(response.message,false);
         }
       } else {
         console.error("Warehouse not found for the given ID:", warehouseId);
@@ -177,20 +179,20 @@ function WarehousePage() {
         </button>
       </div>
       <div className="mt-2 mt-md-0 d-none d-lg-flex justify-content-end">
-        <form className="nav-link search" style={{ width: "500px" }}>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Search Warehouse"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            style={{
-              borderRadius: "5px",
-              marginRight: "10px",
-              transition: "box-shadow 0.3s ease",
-            }}
-          />
-        </form>
+      <form className="nav-link mt-2 mt-md-0 d-none d-lg-flex search justify-content-end" style={{ width: "500px", marginRight: "-25px" , }}>
+  <input
+    type="text"
+    className="form-control"
+    placeholder="Search Warehouse"
+    value={searchTerm}
+    onChange={(e) => setSearchTerm(e.target.value)}
+    style={{
+      borderRadius: "5px",
+      marginRight: "10px",
+      transition: "box-shadow 0.3s ease",
+    }}
+  />
+</form>
       </div>
       <div className="row mt-3">
         <div className="col-12 grid-margin">
@@ -233,7 +235,7 @@ function WarehousePage() {
   onMouseOut={(e) => (e.target.style.transform = 'translateY(0)')}
 >
   <td>
-    View more
+    View Stock
   </td>
 </Link>
 

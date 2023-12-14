@@ -25,53 +25,8 @@ function Header() {
     </button>
   
     <ul className="navbar-nav navbar-nav-right">
-      <li className="nav-item dropdown d-none d-lg-block">
-        {/* <a className="nav-link btn btn-success create-new-button" id="createbuttonDropdown" data-toggle="dropdown" aria-expanded="false" href="#">+ Create New Project</a> */}
-        <div className="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="createbuttonDropdown">
-          <h6 className="p-3 mb-0">Projects</h6>
-          <div className="dropdown-divider" />
-          <a className="dropdown-item preview-item">
-            <div className="preview-thumbnail">
-              <div className="preview-icon bg-dark rounded-circle">
-                <i className="mdi mdi-file-outline text-primary" />
-              </div>
-            </div>
-            <div className="preview-item-content">
-              <p className="preview-subject ellipsis mb-1">Software Development</p>
-            </div>
-          </a>
-          <div className="dropdown-divider" />
-          <a className="dropdown-item preview-item">
-            <div className="preview-thumbnail">
-              <div className="preview-icon bg-dark rounded-circle">
-                <i className="mdi mdi-web text-info" />
-              </div>
-            </div>
-            <div className="preview-item-content">
-              <p className="preview-subject ellipsis mb-1">UI Development</p>
-            </div>
-          </a>
-          <div className="dropdown-divider" />
-          <a className="dropdown-item preview-item">
-            <div className="preview-thumbnail">
-              <div className="preview-icon bg-dark rounded-circle">
-                <i className="mdi mdi-layers text-danger" />
-              </div>
-            </div>
-            <div className="preview-item-content">
-              <p className="preview-subject ellipsis mb-1">Software Testing</p>
-            </div>
-          </a>
-          <div className="dropdown-divider" />
-          <p className="p-3 mb-0 text-center">See all projects</p>
-        </div>
-      </li>
-      <li className="nav-item nav-settings d-none d-lg-block">
-        <a className="nav-link" href="#">
-          <i className="mdi mdi-view-grid" />
-        </a>
-      </li>
-      <li className="nav-item dropdown border-left">
+     
+      {/* <li className="nav-item dropdown border-left">
         <a className="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
           <i className="mdi mdi-email" />
           <span className="count bg-success" />
@@ -111,8 +66,8 @@ function Header() {
           <div className="dropdown-divider" />
           <p className="p-3 mb-0 text-center">4 new messages</p>
         </div>
-      </li>
-      <li className="nav-item dropdown border-left">
+      </li> */}
+      {/* <li className="nav-item dropdown border-left">
         <a className="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
           <i className="mdi mdi-bell" />
           <span className="count bg-danger" />
@@ -158,7 +113,7 @@ function Header() {
           <div className="dropdown-divider" />
           <p className="p-3 mb-0 text-center">See all notifications</p>
         </div>
-      </li>
+      </li> */}
       <li className="nav-item dropdown">
         <a className="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
           <div className="navbar-profile">
@@ -169,18 +124,7 @@ function Header() {
         </a>
         <div className="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="profileDropdown">
           <h6 className="p-3 mb-0">Profile</h6>
-          <div className="dropdown-divider" />
-          <a className="dropdown-item preview-item">
-            <div className="preview-thumbnail">
-              <div className="preview-icon bg-dark rounded-circle">
-                <i className="mdi mdi-settings text-success" />
-              </div>
-            </div>
-            <div className="preview-item-content">
-              <p className="preview-subject mb-1">Settings</p>
-            </div>
-          </a>
-          <div className="dropdown-divider" />
+         
           <a className="dropdown-item preview-item" onClick={handleLogout}>
             <div className="preview-thumbnail">
               <div className="preview-icon bg-dark rounded-circle">
@@ -194,7 +138,7 @@ function Header() {
     </div>
           </a>
           <div className="dropdown-divider" />
-          <p className="p-3 mb-0 text-center">Advanced settings</p>
+          {/* <p className="p-3 mb-0 text-center">Advanced settings</p> */}
         </div>
       </li>
     </ul>

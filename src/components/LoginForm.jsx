@@ -38,7 +38,8 @@ console.log("formdata",formData)
           console.log("Login Successful:", response.message);
 
           // Store the token using the login function from the context
-          login(response.data.token);
+          console.log(response,"responsetoken")
+          login(response.data.data);
           Show_Toast(response.message, true);
 
           // Redirect to the dashboard
@@ -82,7 +83,7 @@ console.log("formdata",formData)
                 <h3 className="card-title text-left mb-3">Login</h3>
                 <form onSubmit={handleSubmit}>
                   <div className="form-group">
-                    <label>Username or username *</label>
+                    <label>Username*</label>
                     <input
                       type="text"
                       className={`form-control p_input ${
@@ -109,20 +110,7 @@ console.log("formdata",formData)
                     />
                     <div className="invalid-feedback">{errors.password}</div>
                   </div>
-                  <div className="form-group d-flex align-items-center justify-content-between">
-                    <div className="form-check">
-                      <label className="form-check-label">
-                        <input
-                          type="checkbox"
-                          className="form-check-input"
-                        />{" "}
-                        Remember me
-                      </label>
-                    </div>
-                    <a href="#" className="forgot-pass">
-                      Forgot password
-                    </a>
-                  </div>
+                
                   <div className="text-center">
                     <button
                       type="submit"
@@ -131,17 +119,8 @@ console.log("formdata",formData)
                       Login
                     </button>
                   </div>
-                  <div className="d-flex">
-                    <button className="btn btn-facebook mr-2 col">
-                      <i className="mdi mdi-facebook" /> Facebook
-                    </button>
-                    <button className="btn btn-google col">
-                      <i className="mdi mdi-google-plus" /> Google plus
-                    </button>
-                  </div>
-                  <p className="sign-up">
-                    Don't have an Account?<a href="#"> Sign Up</a>
-                  </p>
+                 
+                 
                 </form>
               </div>
             </div>

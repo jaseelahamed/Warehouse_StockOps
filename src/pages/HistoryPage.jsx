@@ -133,16 +133,27 @@ function HistoryPage() {
                     <th>Source Warehouse Name</th>
                     <th>Destination Warehouse Name</th>
                     <th>Time</th>
+                    <th>Moved Items</th>
+                    
                     <th>Type</th>
                   </tr>
                 </thead>
                 <tbody style={{ borderRadius: '10px', overflow: 'hidden' }}>
-                  {filteredHistory.map((movement) => (
+                  {filteredHistory.map((movement,index) => (
                     <tr key={movement._id} style={{ transition: 'background-color 0.3s ease' }}>
-                      <td onClick={() => handleOpenModal(movement.products)}>{movement.movement_id}</td>
+                      <td>{ index+1}</td>
+           
                       <td>{movement.sourceWarehouse?.warehousename}</td>
                       <td>{movement.destinationWarehouse?.warehousename}</td>
                       <td>{formatTimestamp(movement.timestamp)}</td>
+           <td onClick={() => handleOpenModal(movement.products)}   style={{
+    textDecoration: 'none',
+    color: 'rgba(153,102,255,0.6)',
+    transition: 'transform 0.3s',
+    // display: 'inline-block', // Ensures inline display
+  }}
+  onMouseOver={(e) => (e.target.style.transform = 'translateY(-2px)')}
+  onMouseOut={(e) => (e.target.style.transform = 'translateY(0)')}>          <i class="mdi mdi-shopping">Click</i></td>
                       <td style={{ color: movement.movementType === 'Transfer' ? 'green' : 'red', transition: 'transform 0.3s ease' }}>{movement.movementType}</td>
                     </tr>
                   ))}
