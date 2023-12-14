@@ -162,7 +162,7 @@ function UserDetails() {
           fetchUsers();
         } else {
           console.error("Error updating user status:", response.message);
-          Show_Toast(response.message, true);
+          Show_Toast(response.message, false);
         }
       }
     } catch (error) {
@@ -206,7 +206,7 @@ function UserDetails() {
               borderRadius: "5px",
               // marginRight: "200px",
               transition: "box-shadow 0.3s ease",
-          
+              color: 'white'
           
             }}
             value={searchTerm}

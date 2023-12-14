@@ -13,8 +13,9 @@ function DeathStockPage() {
   const fetchReturn = async () => {
     try {
       const apiResponse = await ApiCall("GET", "/deadstocks", null);
+      console.log(apiResponse,"dethstock")
       if (apiResponse.status === 200) {
-        setReturn(apiResponse.data);
+        setReturn(apiResponse.data.data);
       } else {
         setErrors(apiResponse.message || "Failed to fetch dead stocks");
       }

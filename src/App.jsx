@@ -4,7 +4,7 @@ import "./App.css";
 // import LeftSideBar from "./layout/LeftSideBar";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import UserDetails from "./pages/UserDetailsPage";
-import { Userpage, Login,Movement,History,Warehouse,Stocks,Return,singlewarhouse } from "./utils/Path_Url";
+import { Userpage, Login,Movement,History,Warehouse,Stocks,Return,singlewarhouse,Products } from "./utils/Path_Url";
 import LoginForm from "./components/LoginForm";
 import MainContainer from "./layout/MainContainer";
 import MovementPage from "./pages/MovementPage";
@@ -14,6 +14,7 @@ import StockPage from "./pages/StockPage";
 import HistoryPage from "./pages/HistoryPage";
 import DeathStockPage from "./pages/DeathStockPage";
 import SingleWarehouse from "./pages/SingleWarehouse";
+import ProductsPage from "./pages/ProductsPage";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
             <Route path={History}  element={ <HistoryPage/>  } />
             <Route path={Return}  element={ <DeathStockPage/>  } />
             <Route path={singlewarhouse}  element={ <SingleWarehouse/>  } />
+            <Route path={Products}  element={ <ProductsPage/>  } />
           </Route>
         </Routes>
       </BrowserRouter>

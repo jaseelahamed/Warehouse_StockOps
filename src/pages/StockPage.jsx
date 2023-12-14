@@ -289,6 +289,8 @@ function StockPage() {
               width: "500px",
               borderRadius: "5px",
               transition: "box-shadow 0.3s ease",
+              color: 'white'
+
             }}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -377,7 +379,7 @@ function StockPage() {
               type="number"
               placeholder="Enter Quantity"
               name="quantity"
-              value={data?.quantity ?? 0}
+              value={data?.quantity}
               onChange={handleInputChange}
               required
               isInvalid={!!errors.quantity}

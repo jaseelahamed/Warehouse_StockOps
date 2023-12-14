@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Userpage, Login, Movement,Warehouse,Stocks,Return } from "../utils/Path_Url";
-import { History,DashBord } from "../utils/Path_Url";
+import { History,DashBord,Products } from "../utils/Path_Url";
 
 
 function LeftSideBar() {
@@ -110,6 +110,24 @@ function LeftSideBar() {
                           }} />
               </span>
               <span className="menu-title">Dashboard</span>
+            </Link>
+          </li>
+          <li className="nav-item menu-items">
+            <Link
+              className="nav-link"
+             to={Products}
+            >
+              <span className="menu-icon">
+                <i className="mdi mdi-basket" style={{
+                            fontSize: "1.5em",
+                            color: "#00d25b",
+                            cursor: "pointer",
+                            // color: '#000', // Initial color
+                            transition: "color 0.3s ease", // Smooth transition
+                            ":hover": { color: "#00d25b" },
+                          }} />
+              </span>
+              <span className="menu-title">Products</span>
             </Link>
           </li>
           <li className="nav-item menu-items">

@@ -36,8 +36,9 @@ function HistoryPage() {
   const fetchHistory = async () => {
     try {
       const apiResponse = await ApiCall("GET", "/movements", null);
+      console.log(apiResponse,"apiresponse")
       if (apiResponse.status === 200) {
-        setHistory(apiResponse.data);
+        setHistory(apiResponse.data.data);
       } else {
         console.error(apiResponse.message || "Failed to fetch movements");
       }

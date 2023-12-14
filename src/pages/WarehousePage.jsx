@@ -72,13 +72,13 @@ function WarehousePage() {
 
       if (response.status) {
         console.log("Warehouse Created/Edited Successfully");
-        Show_Toast(response.status, true);
+        Show_Toast(response.message, true);
         setData('')
         fetchWarehouses();
         handleCloseModal();
       } else {
         console.error("Error creating/editing warehouse:", response.message);
-        Show_Toast(response.status, false);
+        Show_Toast(response.message, false);
       }
     } catch (error) {
       console.error("Error creating/editing warehouse:", error);
@@ -190,7 +190,9 @@ function WarehousePage() {
       borderRadius: "5px",
       marginRight: "10px",
       transition: "box-shadow 0.3s ease",
-    }}
+      color: 'white'
+            }}
+            
   />
 </form>
       </div>

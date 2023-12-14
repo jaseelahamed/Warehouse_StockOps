@@ -33,13 +33,13 @@ console.log("formdata",formData)
       try {
         const response = await ApiCall("post", "/users/login", formData);
 
-        if (response.data && response.data.data) {
+        if (response.data && response.data.token) {
           // Successful login
           console.log("Login Successful:", response.message);
 
           // Store the token using the login function from the context
           console.log(response,"responsetoken")
-          login(response.data.data);
+          login(response.data.token);
           Show_Toast(response.message, true);
 
           // Redirect to the dashboard
@@ -49,7 +49,7 @@ console.log("formdata",formData)
           console.error("Login Failed:", response.message);
 
           // Show an error message to the user
-          Show_Toast(response.message, false);
+          Show_Toast(response.data, false);
         }
       } catch (error) {
         console.error("API Error:", error);
@@ -93,6 +93,7 @@ console.log("formdata",formData)
                       name="username"
                       value={formData.username}
                       onChange={handleInputChange}
+                      style={{ color: 'white' }}
                     />
                     <div className="invalid-feedback">{errors.username}</div>
                   </div>
@@ -107,6 +108,7 @@ console.log("formdata",formData)
                       name="password"
                       value={formData.password}
                       onChange={handleInputChange}
+                      style={{ color: 'white' }}
                     />
                     <div className="invalid-feedback">{errors.password}</div>
                   </div>
