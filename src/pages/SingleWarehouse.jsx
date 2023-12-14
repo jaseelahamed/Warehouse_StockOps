@@ -37,7 +37,7 @@ function SingleWarehouse() {
           <div className="card-body">
             <h4 className="card-title">Warehouse Details</h4>
             <div className="table-responsive">
-              <table className="table table-bordered table-contextual">
+              <table className="table table-contextual">
                 <thead>
                   <tr>
                     <th>#</th>

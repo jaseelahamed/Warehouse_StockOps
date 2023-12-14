@@ -186,34 +186,39 @@ function UserDetails() {
   }
   return (
     <>
-      <div className="text-sm-end">
+  <div style={{display:'flex',justifyContent:'space-between'}} className="text-sm-end mt-3">
         <button
           type="button"
           className="btn btn-success btn-rounded waves-effect waves-light mb-2 me-2"
-          onClick={() => handleOpenModal()}
+          onClick={handleOpenModal}
+          style={{
+            backgroundColor: "#00d25b",
+            borderColor: "#00d25b",
+            transition: "background-color 0.3s ease",
+            height:'35px',
+            marginLeft:'10px'
+          }}
         >
           <i className="mdi mdi-account-plus"></i> Add New User
         </button>
+        <form className="nav-link mt-2 mt-md-0 d-none d-lg-flex search justify-content-end" style={{ width: "500px", marginRight: "-25px" , }}>
+  <input
+    type="text"
+    className="form-control"
+    placeholder="Search Warehouse"
+    value={searchTerm}
+    onChange={(e) => setSearchTerm(e.target.value)}
+    style={{
+      borderRadius: "5px",
+      marginRight: "10px",
+      transition: "box-shadow 0.3s ease",
+      marginRight:"20px"
+    }}
+  />
+</form>
+
       </div>
-      <div>
-        <form className="nav-link mt-2 mt-md-0 d-none d-lg-flex search justify-content-end"  style={{  marginBottom: "10px" }} >
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Search User"
-            style={{
-              width: "500px",
-              borderRadius: "5px",
-              // marginRight: "200px",
-              transition: "box-shadow 0.3s ease",
-          
-          
-            }}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </form>
-      </div>
+     
 
       <div className="col-lg-12 grid-margin stretch-card">
         <div className="card">
@@ -221,8 +226,7 @@ function UserDetails() {
             <div className="table-responsive">
               <table className="table table-striped">
                 <thead>
-                  <tr>
-                    
+                  <tr> 
                     <th> Num </th>
                     <th> User ID </th>
                     <th>User Name </th>
