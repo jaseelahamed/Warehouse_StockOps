@@ -8658,7 +8658,7 @@ pre {
   .table-hover .table-success:hover > th {
     background-color: #00a849; }
 
-.table-info,
+/* .table-info,
 .table-info > th,
 .table-info > td {
   background-color: #8457d5; }
@@ -8673,12 +8673,12 @@ pre {
   background-color: #7543d0; }
   .table-hover .table-info:hover > td,
   .table-hover .table-info:hover > th {
-    background-color: #7543d0; }
+    background-color: #7543d0; } */
 
-.table-warning,
+/* .table-warning,
 .table-warning > th,
 .table-warning > td {
-  background-color: #eb9d00; }
+  background-color: #eb9d00; } */
 
 .table-warning th,
 .table-warning td,

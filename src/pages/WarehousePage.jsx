@@ -164,7 +164,7 @@ function WarehousePage() {
 
   return (
     <>
-      <div className="text-sm-end mt-3">
+      <div style={{display:'flex',justifyContent:'space-between'}} className="text-sm-end mt-3">
         <button
           type="button"
           className="btn btn-success btn-rounded waves-effect waves-light mb-2 me-2"
@@ -173,13 +173,12 @@ function WarehousePage() {
             backgroundColor: "#00d25b",
             borderColor: "#00d25b",
             transition: "background-color 0.3s ease",
+            height:'35px'
           }}
         >
           <i className="mdi mdi-account-plus"></i> Add New Warehouse
         </button>
-      </div>
-      <div className="mt-2 mt-md-0 d-none d-lg-flex justify-content-end">
-      <form className="nav-link mt-2 mt-md-0 d-none d-lg-flex search justify-content-end" style={{ width: "500px", marginRight: "-25px" , }}>
+        <form className="nav-link mt-2 mt-md-0 d-none d-lg-flex search justify-content-end" style={{ width: "500px", marginRight: "-25px" , }}>
   <input
     type="text"
     className="form-control"
@@ -195,6 +194,10 @@ function WarehousePage() {
             
   />
 </form>
+
+      </div>
+      <div className="mt-2 mt-md-0 d-none d-lg-flex justify-content-end">
+      
       </div>
       <div className="row mt-3">
         <div className="col-12 grid-margin">
