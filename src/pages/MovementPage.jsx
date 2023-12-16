@@ -258,18 +258,7 @@ function MovementPage() {
   return (
     <>
       <div className="container mt-5">
-        {/* <h1
-          className="mb-4"
-          style={{
-            fontFamily: "YourCustomFont",
-            color: "white",
-            fontSize: "2.5em",
-            fontWeight: "bold",
-            textShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",
-          }}
-        >
-          Move Products
-        </h1> */}
+     
         <h1
           className="mb-4"
           style={{
@@ -390,11 +379,7 @@ function MovementPage() {
         {warehouse.warehouse.warehousename}
       </option>
     ))}
-                    {/* {uniqueWarehouses.map((warehouse, index) => (
-                      <option key={index} value={warehouse.warehouse._id}>
-                        {warehouse.warehouse.warehousename}
-                      </option>
-                    ))} */}
+                
                   </select>
                 </div>
 
@@ -541,14 +526,7 @@ function MovementPage() {
                   marginTop: "10px",
                   width: "100%", // Make the button full width
                 }}
-                // onMouseEnter={(e) => {
-                //   e.target.style.backgroundColor = "#5fe398";
-                //   e.target.style.transform = "scale(1.1)";
-                // }}
-                // onMouseLeave={(e) => {
-                //   e.target.style.backgroundColor = "#00d25b";
-                //   e.target.style.transform = "scale(1)";
-                // }}
+           
               >
                 Submit
               </button>

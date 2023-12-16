@@ -53,7 +53,7 @@ function LoginForm() {
           const decodedToken = decodeTokenAndCheckRole(response.data.token);
 
           if (decodedToken.role === "admin") {
-            navigate(DashBord);
+            // navigate(DashBord);
           } else {
             // Handle non-admin user
             Show_Toast("Invalid user");
@@ -77,7 +77,7 @@ function LoginForm() {
     const errors = {};
 
     if (!data. username) {
-      errors. username = "Username or  username is required";
+      errors. username = "  username is required";
     }
 
     if (!data.password) {
@@ -133,14 +133,13 @@ function LoginForm() {
                       type="submit"
                       className="btn btn-success btn-rounded waves-effect waves-light mb-2 me-2"
                       style={{
-                        // backgroundColor: "#00d25b",
-                        // color: "#fff",
+                      
                         padding: "10px 20px",
-                        // borderRadius: "5px",
+                      
                         transition: "background-color 0.3s ease, transform 0.2s ease",
                         cursor: "pointer",
                         marginTop: "10px",
-                        width: "100%", // Make the button full width
+                        width: "100%", 
                       }}
                     >
                       Login

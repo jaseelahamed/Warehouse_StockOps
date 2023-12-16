@@ -46,10 +46,7 @@ function ProductsPage() {
     };
     const handleOpenModalTwo = (product) => {
         setData(product)
-    //   const selectedWarehouse = product.find(
-    //     (product) => product._id === productId
-    //   ) || { isActive: true };
-    //   setData(selectedWarehouse);
+  
       setIsModalOpenTwo(true);
     };
   
@@ -73,11 +70,6 @@ function ProductsPage() {
   
       setValidated(true);
   
-    //   const formErrors = validateForm(data);
-    //   if (Object.keys(formErrors).length > 0) {
-    //     setErrors(formErrors);
-    //     return;
-    //   }
   
       try {
         const endpoint = data._id ? `/products/${data._id}` : "/products";
@@ -115,14 +107,7 @@ function ProductsPage() {
       const { name, value } = e.target;
       setData({ ...data, [name]: value });
     };
-    // const handleInputChange = (e) => {
-    //   const { name, value } = e.target;
-    //   if (name === 'username') {
-    //     setProductname(value);
-    //   } else if (name === 'productid') {
-    //     setProductid(value);
-    //   }
-    // };
+ 
     const handleDelete = async (productId) => {
         try {
           const endpoint = `/products/${productId}`;
@@ -198,8 +183,7 @@ function ProductsPage() {
                       <tr>
                         <th> Product ID </th>
                         <th> Product Name </th>
-                        {/* <th> Total Stock </th>
-                        <th> Active or Not </th> */}
+                     
                       </tr>
                     </thead>
                     <tbody>
@@ -241,12 +225,7 @@ function ProductsPage() {
                               ></i>
                             </div>
                               </td>
-                             {/* <td>  <i class="mdi mdi-delete"  style={{
-                                  color: "red",
-                                  fontSize: "1.5em",
-                                  cursor: "pointer",
-                                  transition: "color 0.3s ease",
-                                }}></i></td>  */}
+                           
                         </tr>
                       ))}
                     </tbody>

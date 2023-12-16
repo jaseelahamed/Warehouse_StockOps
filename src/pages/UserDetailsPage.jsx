@@ -328,26 +328,7 @@ function UserDetails() {
             </InputGroup>
           </Form.Group>
 
-          {/* <Form.Group className="mb-3" as={Col} controlId="validationCustom03">
-            <Form.Label className="mb-1 mt-4">Role</Form.Label>
-            <InputGroup hasValidation>
-              <Form.Control
-                required
-                type="text"
-                
-                placeholder="Enter role"
-                name="role"
-                value={data?.role || ""}
-                onChange={handleInputChange}
-                aria-describedby="inputGroupPrepend"
-                isInvalid={!!errors?.role}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors?.role}
-              </Form.Control.Feedback>
-            </InputGroup>
-          </Form.Group> */}
-
+         
           <div className="d-flex justify-content-end mt-4">
             <Button
               type="submit"

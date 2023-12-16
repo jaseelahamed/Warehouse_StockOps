@@ -140,20 +140,7 @@ function WarehousePage() {
     }
   };
 
-  // const Singlewarehouse = async (warehouseId) => {
-  //   try {
-  //     const response = await ApiCall("GET", `/stocks/${warehouseId}`, null);
-
-  //     if (response.status === 200) {
-  //       console.log("Warehouse details:", response.data);
-  //     } else {
-  //       console.error("Error fetching warehouse details:", response.message);
-  //       Show_Toast(response.status);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching warehouse details:", error);
-  //   }
-  // };
+  
 
   const filteredWarehouses = warehouses.filter(
     (warehouse) =>
@@ -234,7 +221,7 @@ function WarehousePage() {
     textDecoration: 'none',
     color: 'rgba(153,102,255,0.6)',
     transition: 'transform 0.3s',
-    display: 'inline-block', // Ensures inline display
+    display: 'inline-block', 
   }}
   onMouseOver={(e) => (e.target.style.transform = 'translateY(-2px)')}
   onMouseOut={(e) => (e.target.style.transform = 'translateY(0)')}
@@ -272,15 +259,7 @@ function WarehousePage() {
                               }}
                               onClick={() => handleOpenModal(warehouse._id)}
                             ></i>
-                            {/* <i
-                              className="mdi mdi-delete-sweep"
-                              style={{
-                                color: "red",
-                                fontSize: "1.5em",
-                                cursor: "pointer",
-                                transition: "color 0.3s ease",
-                              }}
-                            ></i> */}
+                          
                           </div>
                         </td>
                       </tr>

@@ -99,9 +99,7 @@ console.log(history,"history time")
         <i class="mdi mdi-file-excel"></i>
             Export to Excel
         </button>
-      {/* <Button style={{backgroundColor: "#00d25b" }} onClick={exportToExcel} className="mb-3">
-                Export to Excel
-              </Button> */}
+   
       <div>
         <form className="nav-link mt-2 mt-md-0 d-none d-lg-flex search justify-content-end" style={{  marginBottom: "10px" }}>
          
@@ -166,8 +164,7 @@ console.log(history,"history time")
               <div className="col-lg-12 grid-margin stretch-card">
               <div className="card">
                 <div className="card-body">
-                  {/* <h4 className="card-title">Movement History</h4> */}
-                  {/* <p className="card-description">Transfer &amp; <code>Return</code></p> */}
+                
                   <div className="table-responsive">
           <table className="table table-bordered" style={{ borderRadius: '10px', overflow: 'hidden' }}>
             <thead>

@@ -143,10 +143,7 @@ function StockPage() {
     return errors;
   };
 
-  // const handleInputChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setData({ ...data, [name]: value });
-  // };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     if (value) {
@@ -267,16 +264,7 @@ function StockPage() {
           </Form.Control>
         </Form.Group>
 
-        {/* {selectedWarehouse && (
-          <Button
-            type="button"
-            variant="outline-secondary"
-            onClick={() => setSelectedWarehouse("")}
-            style={{ transition: "background-color 0.3s ease" }}
-          >
-            Clear Warehouse Filter
-          </Button>
-        )} */}
+       
       </div>
 
       <div>

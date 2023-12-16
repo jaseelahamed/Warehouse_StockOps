@@ -17,15 +17,7 @@ function LeftSideBar() {
     <>
       <nav style={{height:'1025px', width:'250px'}} className="sidebar sidebar-offcanvas" id="sidebar">
         <div className="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
-          {/* <a
-            className="sidebar-brand brand-logo"
-            href="https://themewagon.github.io/corona-free-dark-bootstrap-admin-template/index.html"
-          >
-            <img
-              src="https://themewagon.github.io/corona-free-dark-bootstrap-admin-template/assets/images/logo.svg"
-              alt="logo"
-            />
-          </a> */}
+       
           <a
             className="sidebar-brand brand-logo-mini"
             href="https://themewagon.github.io/corona-free-dark-bootstrap-admin-template/index.html"
@@ -50,7 +42,7 @@ function LeftSideBar() {
                 </div>
                 <div className="profile-name">
                   <h5 className="mb-0 font-weight-normal">{ Role}</h5>
-                  {/* <span>Gold Member</span> */}
+               
                 </div>
               </div>
          
@@ -99,9 +91,7 @@ function LeftSideBar() {
               </div>
             </div>
           </li>
-          {/* <li className="nav-item nav-category">
-            <span className="nav-link">Navigation</span>
-          </li> */}
+        
           <li className="nav-item menu-items">
             <Link
               className="nav-link"
@@ -112,7 +102,7 @@ function LeftSideBar() {
                             fontSize: "1.5em",
                             color: "#00d25b",
                             cursor: "pointer",
-                            // color: '#000', // Initial color
+                          
                             transition: "color 0.3s ease", // Smooth transition
                             ":hover": { color: "#00d25b" },
                           }} />
@@ -130,7 +120,7 @@ function LeftSideBar() {
                             fontSize: "1.5em",
                             color: "#00d25b",
                             cursor: "pointer",
-                            // color: '#000', // Initial color
+                          
                             transition: "color 0.3s ease", // Smooth transition
                             ":hover": { color: "#00d25b" },
                           }} />
@@ -150,7 +140,7 @@ function LeftSideBar() {
                             fontSize: "1.5em",
                             color: "#00d25b",
                             cursor: "pointer",
-                            // color: '#000', // Initial color
+                        
                             transition: "color 0.3s ease", // Smooth transition
                             ":hover": { color: "#00d25b" },
                           }}></i> 
@@ -166,7 +156,7 @@ function LeftSideBar() {
                             fontSize: "1.5em",
                             color: "#00d25b",
                             cursor: "pointer",
-                            // color: '#000', // Initial color
+                          
                             transition: "color 0.3s ease", // Smooth transition
                             ":hover": { color: "#00d25b" },
                           }}></i> 
@@ -184,7 +174,7 @@ function LeftSideBar() {
                             fontSize: "1.5em",
                             color: "#00d25b",
                             cursor: "pointer",
-                            // color: '#000', // Initial color
+                          
                             transition: "color 0.3s ease", // Smooth transition
                             ":hover": { color: "#00d25b" },
                           }}></i> 
@@ -199,7 +189,7 @@ function LeftSideBar() {
                             fontSize: "1.5em",
                             color: "#00d25b",
                             cursor: "pointer",
-                            // color: '#000', // Initial color
+                          
                             transition: "color 0.3s ease", // Smooth transition
                             ":hover": { color: "#00d25b" },
                           }} ></i>
@@ -214,7 +204,7 @@ function LeftSideBar() {
                             fontSize: "1.5em",
                             color: "#00d25b",
                             cursor: "pointer",
-                            // color: '#000', // Initial color
+                  
                             transition: "color 0.3s ease", // Smooth transition
                             ":hover": { color: "#00d25b" },
                           }} ></i>
@@ -225,13 +215,7 @@ function LeftSideBar() {
         
          
           <li className="nav-item menu-items">
-      {/* <a className="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
-        <span className="menu-icon">
-          <i className="mdi mdi-security" />
-        </span>
-        <span className="menu-title">User Pages</span>
-        <i className="menu-arrow" />
-      </a> */}
+   
       <div className="collapse" id="auth">
         <ul className="nav flex-column sub-menu">
           <li className="nav-item"> <a className="nav-link" href="https://themewagon.github.io/corona-free-dark-bootstrap-admin-template/pages/samples/blank-page.html"> Blank Page </a></li>
