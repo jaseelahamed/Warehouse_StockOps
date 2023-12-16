@@ -118,7 +118,7 @@ function Header() {
         <a className="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
           <div className="navbar-profile">
             <img className="img-xs rounded-circle" src="../../assets/images/faces/face15.jpg" alt />
-            <p className="mb-0 d-none d-sm-block navbar-profile-name">Henry Klein</p>
+            <p className="mb-0 d-none d-sm-block navbar-profile-name">Log out</p>
             <i className="mdi mdi-menu-down d-none d-sm-block" />
           </div>
         </a>

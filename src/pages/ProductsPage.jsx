@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 
 function ProductsPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalOpenTwo, setIsModalOpenTwo] = useState(false);
     const [data, setData] = useState({});
     const [validated, setValidated] = useState(false);
     const [errors, setErrors] = useState({});
@@ -43,11 +44,23 @@ function ProductsPage() {
       setData(selectedWarehouse);
       setIsModalOpen(true);
     };
+    const handleOpenModalTwo = (product) => {
+        setData(product)
+    //   const selectedWarehouse = product.find(
+    //     (product) => product._id === productId
+    //   ) || { isActive: true };
+    //   setData(selectedWarehouse);
+      setIsModalOpenTwo(true);
+    };
   
     const handleCloseModal = () => {
       setIsModalOpen(false);
     };
   
+    const handleCloseModalTwo = () => {
+      setIsModalOpenTwo(false);
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log(data,"data")
@@ -67,8 +80,8 @@ function ProductsPage() {
     //   }
   
       try {
-        const endpoint = data._id ? `/products/${data._id}` : "/warehouses";
-        const method =  "put" ;
+        const endpoint = data._id ? `/products/${data._id}` : "/products";
+        const method =  data._id ? "put" : "post";
   console.log(endpoint,method,"endpoint methed")
           const response = await ApiCall(method, endpoint, data);
           console.log(response,"prodectupdate")
@@ -102,50 +115,36 @@ function ProductsPage() {
       const { name, value } = e.target;
       setData({ ...data, [name]: value });
     };
-  
-    // const toggleButton = async (productId) => {
-
-        
-    //   try {
-    //     if (!warehouseId) {
-    //       console.error("Invalid warehouseId");
-    //       return;
-    //     }
-  
-    //     const warehouseToUpdate = product.find(
-    //       (product) => product?._id === productId
-    //     );
-  
-    //     if (warehouseToUpdate) {
-    //       const updatedData = {
-    //         ...warehouseToUpdate,
-    //         isActive: !warehouseToUpdate.isActive,
-    //       };
-  
-    //       const response = await ApiCall(
-    //         "put",
-    //         `/products/${warehouseId}`,
-    //         updatedData
-    //       );
-  
-    //       if (response.status) {
-    //         console.log("product status updated successfully");
-    //         Show_Toast(response.message, true);
-    //         setData('')
-    //         fetchProduct();
-    //       } else {
-    //         console.error("Error updating warehouse status:", response.message);
-    //         Show_Toast(response.message,false);
-    //       }
-    //     } else {
-    //       console.error("Warehouse not found for the given ID:", warehouseId);
-    //     }
-    //   } catch (error) {
-    //     console.error("Error updating warehouse status:", error);
+    // const handleInputChange = (e) => {
+    //   const { name, value } = e.target;
+    //   if (name === 'username') {
+    //     setProductname(value);
+    //   } else if (name === 'productid') {
+    //     setProductid(value);
     //   }
     // };
-  
-    
+    const handleDelete = async (productId) => {
+        try {
+          const endpoint = `/products/${productId}`;
+          const method = 'DELETE';
+      
+          const response = await ApiCall(method, endpoint, );
+      
+          if (response.status) {
+            console.log('Product deleted successfully');
+              Show_Toast(response.message, true);
+              fetchProduct();
+              handleCloseModalTwo()
+            // Additional logic if needed after successful deletion
+          } else {
+            console.error('Error deleting product:', response.message);
+            Show_Toast(response.message, false);
+          }
+        } catch (error) {
+          console.error('Error deleting product:', error);
+        }
+      };
+      
   
     const filteredProduct = product.filter(
         (product) =>
@@ -156,19 +155,17 @@ function ProductsPage() {
   
     return (
       <>
+        
+
+        <button
+        type="button"
+        className="btn btn-success btn-rounded waves-effect waves-light mb-2 me-2"
+        onClick={handleOpenModal}
+      >
+        <i className="mdi mdi-account-plus"></i> Add New Product
+      </button>
         <div className="text-sm-end mt-3">
-          {/* <button
-            type="button"
-            className="btn btn-success btn-rounded waves-effect waves-light mb-2 me-2"
-            onClick={handleOpenModal}
-            style={{
-              backgroundColor: "#00d25b",
-              borderColor: "#00d25b",
-              transition: "background-color 0.3s ease",
-            }}
-          >
-            <i className="mdi mdi-account-plus"></i> Add New Warehouse
-          </button> */}
+          
         </div>
         <div className="mt-2 mt-md-0 d-none d-lg-flex justify-content-end">
         <form className="nav-link mt-2 mt-md-0 d-none d-lg-flex search justify-content-end" style={{ width: "500px", marginRight: "-25px" , }}>
@@ -217,38 +214,9 @@ function ProductsPage() {
                               {product.productname}
                             </span>
                           </td>
-                          {/* <Link
-    to={`/singlewarhouse/${warehouse._id}`}
-    style={{
-      textDecoration: 'none',
-      color: 'rgba(153,102,255,0.6)',
-      transition: 'transform 0.3s',
-      display: 'inline-block', // Ensures inline display
-    }}
-    onMouseOver={(e) => (e.target.style.transform = 'translateY(-2px)')}
-    onMouseOut={(e) => (e.target.style.transform = 'translateY(0)')}
-  >
-    <td>
-      View Stock
-    </td>
-  </Link> */}
+                 
   
-                          {/* <td>
-                            <div
-                              className={`badge ${
-                                warehouse.isActive
-                                  ? "badge-outline-success"
-                                  : "badge-outline-danger"
-                              }`}
-                              onClick={() => toggleButton(warehouse._id)}
-                              style={{
-                                cursor: "pointer",
-                                transition: "background-color 0.3s ease",
-                              }}
-                            >
-                              {warehouse.isActive ? "Active" : "Inactive"}
-                            </div>
-                          </td> */}
+                          
                           <td>
                             <div style={{ display: "flex", gap: "10px" }}>
                               <i
@@ -261,17 +229,24 @@ function ProductsPage() {
                                 }}
                                 onClick={() => handleOpenModal(product._id)}
                               ></i>
-                              {/* <i
-                                className="mdi mdi-delete-sweep"
+                              <i
+                                className="mdi mdi-delete"
                                 style={{
                                   color: "red",
                                   fontSize: "1.5em",
                                   cursor: "pointer",
                                   transition: "color 0.3s ease",
-                                }}
-                              ></i> */}
+                                          }}
+                                          onClick={()=>handleOpenModalTwo(product)}
+                              ></i>
                             </div>
-                          </td>
+                              </td>
+                             {/* <td>  <i class="mdi mdi-delete"  style={{
+                                  color: "red",
+                                  fontSize: "1.5em",
+                                  cursor: "pointer",
+                                  transition: "color 0.3s ease",
+                                }}></i></td>  */}
                         </tr>
                       ))}
                     </tbody>
@@ -284,7 +259,7 @@ function ProductsPage() {
         <ModalForm
           show={isModalOpen}
           onHide={handleCloseModal}
-          title="Update Product"
+          title=" Product"
         >
           <Form
             noValidate
@@ -320,7 +295,38 @@ function ProductsPage() {
               </Button>
             </div>
           </Form>
-        </ModalForm>
+            </ModalForm>
+            <ModalForm
+  show={isModalOpenTwo}
+  onHide={handleCloseModalTwo}
+  title="Delete Product"
+  centered
+>
+  <div className="text-center">
+    <i
+      className="mdi mdi-alert-outline"
+      style={{
+        color: "red",
+        fontSize: "4em",
+        cursor: "pointer",
+        transition: "color 0.3s ease",
+      }}
+    ></i>
+    <p>Are you sure you want to delete {data.productname}?</p>
+    <Button variant="danger" onClick={() => handleDelete(data._id)}>
+      Delete
+    </Button>
+    <Button
+      variant="success"
+      onClick={handleCloseModalTwo}
+      style={{ marginLeft: '20px' }} 
+    >
+      Cancel
+    </Button>
+  </div>
+</ModalForm>
+
+
       </>
   )
 }

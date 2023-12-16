@@ -2,12 +2,20 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Userpage, Login, Movement,Warehouse,Stocks,Return } from "../utils/Path_Url";
 import { History,DashBord,Products } from "../utils/Path_Url";
-
+import { useAuth } from "../service/Context";
+import { jwtDecode } from "jwt-decode";
 
 function LeftSideBar() {
+
+  const { token } = useAuth();
+  
+  const decoded = jwtDecode(token);
+  console.log(decoded,"sidebar token")
+  const Role = decoded.role;
+  console.log(Role,"role")
   return (
     <>
-      <nav className="sidebar sidebar-offcanvas" id="sidebar">
+      <nav style={{height:'1025px', width:'250px'}} className="sidebar sidebar-offcanvas" id="sidebar">
         <div className="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
           {/* <a
             className="sidebar-brand brand-logo"
@@ -28,7 +36,7 @@ function LeftSideBar() {
             />
           </a>
         </div>
-        <ul className="nav">
+        <ul className="nav" style={{position:'fixed'}} >
           <li className="nav-item profile">
             <div className="profile-desc">
               <div className="profile-pic">
@@ -41,8 +49,8 @@ function LeftSideBar() {
                   <span className="count bg-success" />
                 </div>
                 <div className="profile-name">
-                  <h5 className="mb-0 font-weight-normal">Jasil</h5>
-                  <span>Gold Member</span>
+                  <h5 className="mb-0 font-weight-normal">{ Role}</h5>
+                  {/* <span>Gold Member</span> */}
                 </div>
               </div>
          

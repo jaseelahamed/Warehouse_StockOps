@@ -4,16 +4,23 @@ import { useAuth } from "../service/Context";
 import { Show_Toast } from "../utils/Toast";
 import { useNavigate } from "react-router-dom";
 import { DashBord } from "../utils/Path_Url";
+import { jwtDecode } from "jwt-decode";
+
+
+function decodeTokenAndCheckRole(token) {
+  // Check if the token is present and a string before decoding
+  const decoded = token && typeof token === 'string' ? jwtDecode(token) : null;
+  console.log(decoded, "tokenDecoded");
+  return decoded;
+}
 
 function LoginForm() {
   const navigate = useNavigate();
-  const { login } = useAuth();
-
+  const { login, token } = useAuth();
   const [formData, setFormData] = useState({
-     username: "",
+    username: "",
     password: "",
   });
-console.log("formdata",formData)
   const [errors, setErrors] = useState({});
 
   const handleInputChange = (e) => {
@@ -38,12 +45,19 @@ console.log("formdata",formData)
           console.log("Login Successful:", response.message);
 
           // Store the token using the login function from the context
-          console.log(response,"responsetoken")
+          console.log(response, "responseToken");
           login(response.data.token);
           Show_Toast(response.message, true);
 
-          // Redirect to the dashboard
-          navigate(DashBord);
+          // Decode the token and check the role
+          const decodedToken = decodeTokenAndCheckRole(response.data.token);
+
+          if (decodedToken.role === "admin") {
+            navigate(DashBord);
+          } else {
+            // Handle non-admin user
+            Show_Toast("Invalid user");
+          }
         } else {
           // Handle authentication error
           console.error("Login Failed:", response.message);
@@ -57,6 +71,7 @@ console.log("formdata",formData)
       }
     }
   };
+
 
   const validateForm = (data) => {
     const errors = {};
@@ -89,7 +104,7 @@ console.log("formdata",formData)
                       className={`form-control p_input ${
                         errors.username ? "is-invalid" : ""
                       }`}
-                      placeholder="Enter username or username"
+                      placeholder="Enter username "
                       name="username"
                       value={formData.username}
                       onChange={handleInputChange}
@@ -116,7 +131,17 @@ console.log("formdata",formData)
                   <div className="text-center">
                     <button
                       type="submit"
-                      className="btn btn-primary btn-block enter-btn"
+                      className="btn btn-success btn-rounded waves-effect waves-light mb-2 me-2"
+                      style={{
+                        // backgroundColor: "#00d25b",
+                        // color: "#fff",
+                        padding: "10px 20px",
+                        // borderRadius: "5px",
+                        transition: "background-color 0.3s ease, transform 0.2s ease",
+                        cursor: "pointer",
+                        marginTop: "10px",
+                        width: "100%", // Make the button full width
+                      }}
                     >
                       Login
                     </button>

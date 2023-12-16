@@ -4,6 +4,7 @@ import Chart from 'chart.js/auto';
 import ModalForm from '../components/ModalForm';
 import { ApiCall } from '../service/ApiCall';
 import { Show_Toast } from "../utils/Toast";
+import { useNavigate } from "react-router-dom";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -14,7 +15,8 @@ import {
   Legend,
   ArcElement,
 } from "chart.js";
-import {Bar} from 'react-chartjs-2'
+import { Bar } from 'react-chartjs-2'
+import { Products } from '../utils/Path_Url';
 
 ChartJS.register(
   CategoryScale,
@@ -29,7 +31,7 @@ ArcElement,
 
 function DashbordPage() {
 
-
+  const navigate =useNavigate()
   const [chartdata, setChartdata] = useState([]);
 
   console.log("stocks",chartdata)
@@ -131,6 +133,7 @@ function DashbordPage() {
         if (response.status === 200) {
           Show_Toast(response.message, true,);
           setProductname('')
+          navigate(Products)
           // Additional logic after successful API call
         } else {
           Show_Toast('Failed to add product:', response.message,false);
@@ -163,7 +166,7 @@ function DashbordPage() {
         <Bar data={data} options={options}>
           
        </Bar>
-      <div class="row">
+      {/* <div class="row">
       {chartdata.map((chartData) => (
         <div key={chartData._id} className="col-sm-4 grid-margin">
           <div className="card">
@@ -177,14 +180,14 @@ function DashbordPage() {
                   </div>
                 </div>
                 <div className="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
-                  {/* <i className="icon-lg mdi mdi-codepen text-primary ml-auto"></i> */}
+              
                   <i class="icon-lg mdi mdi-monitor text-success ml-auto"></i>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      ))}
+      ))} */}
               {/* <div class="col-sm-4 grid-margin">
                 <div class="card">
                   <div class="card-body">
@@ -223,7 +226,7 @@ function DashbordPage() {
                   </div>
                 </div>
               </div> */}
-            </div>
+            {/* </div> */}
       </Container>
 
       <ModalForm

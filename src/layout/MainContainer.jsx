@@ -32,9 +32,9 @@ function MainContainer() {
                       href="https://www.bootstrapdash.com/bootstrap-admin-template/"
                       target="_blank"
                     >
-                      Bootstrap admin templates
+                      StockOps
                     </a>{" "}
-                    from Bootstrapdash.com
+                    from Foxiom
                   </span>
                 </div>
               </footer>

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
-
+// import { jwtDecode } from "jwt-decode";
 // Create a context with an initial value (null in this case)
 const AuthContext = createContext(null);
 
@@ -16,9 +16,14 @@ export const AuthProvider = ({ children }) => {
     setToken(null);
     localStorage.removeItem('token');
   };
+   // Check if the token is present and a string before decoding
+  //  const Decoded = token && typeof token === 'string' ? jwtDecode(token) : null;
+  //  console.log(Decoded, "tokanrole");
+  //  const Role = Decoded.role;
+  //  console.log(Role,"role")
 
   return (
-    <AuthContext.Provider value={{ token, login, logout,setToken }}>
+    <AuthContext.Provider value={{ token, login, logout,setToken, }}>
       {children}
     </AuthContext.Provider>
   );

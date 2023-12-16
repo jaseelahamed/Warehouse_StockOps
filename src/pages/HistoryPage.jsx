@@ -6,6 +6,7 @@ import ModalForm from "../components/ModalForm";
 import { Button } from "react-bootstrap";
 import { writeFile } from "xlsx";
 import * as XLSX from "xlsx";
+import 'react-datepicker/dist/react-datepicker.css';
 
 function HistoryPage() {
   const [history, setHistory] = useState([]);
@@ -14,7 +15,7 @@ function HistoryPage() {
   const [product, setProduct] = useState();
   const [timeSearchTerm, setTimeSearchTerm] = useState("");
   const [selectedDate, setSelectedDate] = useState(null);
-
+console.log(history,"history time")
   useEffect(() => {
     fetchHistory();
   }, []);
@@ -50,12 +51,12 @@ function HistoryPage() {
   };
 
   const filteredHistory = history.filter((movement) => {
-    const movementDate = new Date(movement.timestamp).toLocaleDateString().toLowerCase();
+    const movementDate = new Date(movement.createdAt).toLocaleDateString().toLowerCase();
     const selectedDateFormatted = selectedDate ? selectedDate.toLocaleDateString().toLowerCase() : "";
     return movementDate.includes(timeSearchTerm.toLowerCase()) && movementDate.includes(selectedDateFormatted);
   });
 
-  const formatTimestamp = (timestamp) => {
+  const formatTimestamp = (createdAt) => {
     const options = {
       year: 'numeric',
       month: 'numeric',
@@ -64,7 +65,7 @@ function HistoryPage() {
       minute: 'numeric',
       hour12: true,
     };
-    return new Date(timestamp).toLocaleString('en-US', options);
+    return new Date(createdAt).toLocaleString('en-US', options);
   };
 
 
@@ -75,11 +76,11 @@ function HistoryPage() {
         item?.sourceWarehouse?.warehousename || "Warehouse Removed",
       destinationWarehouse:
         item?.destinationWarehouse?.warehousename || "Warehouse Removed",
-      products: item.products
+      moveditems: item.products
         .map((product) => product.product.productname)
         .join(", "),
       user: item.userId.username,
-      timestamp: new Date(item.timestamp).toLocaleString(),
+      timestamp: new Date(item.createdAt).toLocaleString(),
     }));
 
     const ws = XLSX.utils.json_to_sheet(data);
@@ -102,21 +103,16 @@ function HistoryPage() {
                 Export to Excel
               </Button> */}
       <div>
-        <form className="nav-link mt-2 mt-md-0 d-none d-lg-flex search justify-content-end">
-          {/* <input
-            type="text"
-            className="form-control"
-            placeholder="Search by Time"
-            style={{ width: "500px", borderRadius: "5px", transition: "box-shadow 0.3s ease" }}
-            value={timeSearchTerm}
-            onChange={(e) => setTimeSearchTerm(e.target.value)}
-          /> */}
+        <form className="nav-link mt-2 mt-md-0 d-none d-lg-flex search justify-content-end" style={{  marginBottom: "10px" }}>
+         
           <DatePicker
             selected={selectedDate}
             onChange={handleDateChange}
             placeholderText="Select Date"
             dateFormat="MM/dd/yyyy"
-            className="form-control ml-2"
+          
+            className="form-control ml-2 custom-datepicker"
+           
           />
         </form>
       </div>
@@ -146,7 +142,7 @@ function HistoryPage() {
            
                       <td>{movement.sourceWarehouse?.warehousename}</td>
                       <td>{movement.destinationWarehouse?.warehousename}</td>
-                      <td>{formatTimestamp(movement.timestamp)}</td>
+                      <td>{formatTimestamp(movement.createdAt)}</td>
            <td onClick={() => handleOpenModal(movement.products)}   style={{
     textDecoration: 'none',
     color: 'rgba(153,102,255,0.6)',
@@ -167,22 +163,32 @@ function HistoryPage() {
 
       <ModalForm show={isModalOpen} onHide={handleCloseModal} title="Move Product" style={{ maxWidth: '600px', margin: '50px auto' ,borderRadius: "10px"}}>
         {product && (
-          <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' , borderRadius: "10px"}}>
+              <div className="col-lg-12 grid-margin stretch-card">
+              <div className="card">
+                <div className="card-body">
+                  {/* <h4 className="card-title">Movement History</h4> */}
+                  {/* <p className="card-description">Transfer &amp; <code>Return</code></p> */}
+                  <div className="table-responsive">
+          <table className="table table-bordered" style={{ borderRadius: '10px', overflow: 'hidden' }}>
             <thead>
               <tr>
-                <th style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd', backgroundColor: '#bee6b8',color:'black' }}>Name</th>
-                <th style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd', backgroundColor: '#bee6b8',color:'black'  }}>Quantity</th>
+                <th style={{  backgroundColor: '',color:'white' }}>Name</th>
+                <th style={{ color:'white'  }}>Quantity</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody style={{ borderRadius: '10px', overflow: 'hidden' }}>
               {product.map((item) => (
                 <tr key={item.product._id}>
-                  <td style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd' }}>{item.product.productname}</td>
-                  <td style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd' }}>{item.quantity}</td>
+                  <td  style={{ color:'white'  }}>{item.product.productname}</td>
+                  <td style={{ color:'white'  }}>{item.quantity}</td>
                 </tr>
               ))}
             </tbody>
-          </table>
+                  </table>
+                  </div>
+                  </div>
+                  </div>
+                  </div>
         )}
       </ModalForm>
     </>

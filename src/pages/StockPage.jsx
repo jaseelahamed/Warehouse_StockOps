@@ -267,7 +267,7 @@ function StockPage() {
           </Form.Control>
         </Form.Group>
 
-        {selectedWarehouse && (
+        {/* {selectedWarehouse && (
           <Button
             type="button"
             variant="outline-secondary"
@@ -276,7 +276,7 @@ function StockPage() {
           >
             Clear Warehouse Filter
           </Button>
-        )}
+        )} */}
       </div>
 
       <div>
@@ -353,7 +353,7 @@ function StockPage() {
             <Form.Control
               as="select"
               name="product"
-              value={data?.product?._id}
+              value={data?.products?._id}
               onChange={handleInputChange}
               required
               isInvalid={!!errors.product}

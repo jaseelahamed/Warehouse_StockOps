@@ -12,7 +12,7 @@ function UserDetails() {
   const [errors, setErrors] = useState(null);
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  console.log(data)
+  console.log(users,"users.............")
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -37,8 +37,12 @@ function UserDetails() {
       setLoading(false);
     }
   };
-  const handleOpenModal = (userData) => {
-    setData(userData || {});
+  const handleOpenModal = (productId) => {
+    const selectudataeUser = users.find(
+      (users) => users._id === productId
+    ) || { isActive: true };
+    console.log(selectudataeUser,"udateuserid")
+    setData(selectudataeUser);
     setIsModalOpen(true);
   };
 
@@ -47,7 +51,7 @@ function UserDetails() {
   };
 
   const handleSubmit = async (e, isToggleAction) => {
-    console.log("formdata",data)
+    console.log("formdata",data._id,)
     e.preventDefault();
     const form = e.currentTarget;
     if (form.checkValidity() === false) {
@@ -65,48 +69,49 @@ function UserDetails() {
     }
 
     try {
-      let endpoint, method, requestData;
-      if (isToggleAction) {
-        const userToUpdate = users.find((user) => user.id === data.id);
-        requestData = { ...userToUpdate, isActive: !userToUpdate.isActive };
-        endpoint = `/updateStatus/${data.id}`;
-        method = "put";
-      } else {
-        endpoint = data.id ? `/edit/${data.id}` : "/users";
-        method = data.id ? "put" : "post";
-        requestData = data;
-      }
+     
+      // if (isToggleAction) {
+      //   const userToUpdate = users.find((user) => user.id === data.id);
+      //   requestData = { ...userToUpdate, isActive: !userToUpdate.isActive };
+      //   endpoint = `/users/${data.id}`;
+      //   method = "put";
+      // } else {
+     
+     
+    const endpoint = data._id ? `/users/${data._id}` : "/users";
+    const method = data._id ? "put" : "post";
+    const requestData = data;
 
-      const response = await ApiCall(method, endpoint, requestData);
+    console.log(endpoint, method, data,"endpoint methed");
+    const response = await ApiCall(method, endpoint, requestData);
 
-      if (response.status) {
-        console.log(
-          isToggleAction
-            ? "User status updated successfully"
-            : "User created/edited successfully"
-        );
-        Show_Toast(response.message, true);
-        handleCloseModal();
-        fetchUsers();
-      } else {
-        console.error(
-          isToggleAction
-            ? "Error updating user status:"
-            : "Error creating/editing user:",
-          response.message
-        );
-        Show_Toast(response.message,false);
-      }
-    } catch (error) {
+    if (response.status) {
+      console.log(
+        isToggleAction
+          ? "User status updated successfully"
+          : "User created/edited successfully"
+      );3
+      Show_Toast(response.message, true);
+      handleCloseModal();
+      fetchUsers();
+    } else {
       console.error(
         isToggleAction
           ? "Error updating user status:"
           : "Error creating/editing user:",
-        error
+        response.message
       );
+      Show_Toast(response.message, false);
     }
-  };
-
+  } catch (error) {
+    console.error(
+      isToggleAction
+        ? "Error updating user status:"
+        : "Error creating/editing user:",
+      error
+    );
+  }
+};
   const validateForm = (formData) => {
     const errors = {};
 
@@ -139,10 +144,7 @@ function UserDetails() {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     
-    setData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    setData({...data,[name]:value})
   };
 
   const toggleButton = async (userId) => {
@@ -186,18 +188,11 @@ function UserDetails() {
   }
   return (
     <>
-  <div style={{display:'flex',justifyContent:'space-between'}} className="text-sm-end mt-3">
+      <div className="text-sm-end">
         <button
           type="button"
           className="btn btn-success btn-rounded waves-effect waves-light mb-2 me-2"
-          onClick={handleOpenModal}
-          style={{
-            backgroundColor: "#00d25b",
-            borderColor: "#00d25b",
-            transition: "background-color 0.3s ease",
-            height:'35px',
-            marginLeft:'10px'
-          }}
+          onClick={() => handleOpenModal()}
         >
           <i className="mdi mdi-account-plus"></i> Add New User
         </button>
@@ -213,7 +208,7 @@ function UserDetails() {
               borderRadius: "5px",
               // marginRight: "200px",
               transition: "box-shadow 0.3s ease",
-          
+              color: 'white'
           
             }}
             value={searchTerm}
@@ -221,7 +216,6 @@ function UserDetails() {
           />
         </form>
       </div>
-     
 
       <div className="col-lg-12 grid-margin stretch-card">
         <div className="card">
@@ -229,12 +223,14 @@ function UserDetails() {
             <div className="table-responsive">
               <table className="table table-striped">
                 <thead>
-                  <tr> 
-                    <th> Num </th>
-                    <th> User ID </th>
+                  <tr>
+                    
+                    <th> # </th>
                     <th>User Name </th>
-                    <th> Active Type </th>
                     <th> Password</th>
+                    <th> Active Type </th>
+                    <th> Edit </th>
+                    
                     {/* <th> Action </th> */}
                   </tr>
                 </thead>
@@ -245,8 +241,10 @@ function UserDetails() {
                         {index+1}
                         {/* <img class="img-xs rounded-circle " src="../../assets/images/faces/face15.jpg"/> */}
                       </td>
-                      <td>{user?.userId}</td>
+                      {/* <td>{user?.userId}</td> */}
                       <td>{user?.username || "N/A"}</td>
+                      
+                      <td>{user?.password || "N/A"}</td>
                       <td>
                         <div
                           className={`badge ${
@@ -258,8 +256,20 @@ function UserDetails() {
                         >
                           {user && user.isActive ? "Active" : "Inactive"}
                         </div>
+                      
                       </td>
-                      <td>{user?.password || "N/A"}</td>
+
+                      <td style={{ display: "flex", gap: "10px" }}><i
+                                className="mdi mdi-lead-pencil"
+                                style={{
+                                  fontSize: "1.5em",
+                                  color: "#00d25b",
+                                  cursor: "pointer",
+                                  transition: "color 0.3s ease",
+                                }}
+                                onClick={() => 
+                                  (user?._id)}
+                              ></i></td>
                       {/* ... (existing JSX for actions) */}
                     </tr>
                   ))}
@@ -288,7 +298,7 @@ function UserDetails() {
                 type="text"
                 placeholder="Enter username"
                 name="username"
-                value={data?.username || ""}
+                value={data?.username ?? ""}
                 onChange={handleInputChange}
                 aria-describedby="inputGroupPrepend"
                 isInvalid={!!errors?.username}
@@ -307,7 +317,7 @@ function UserDetails() {
                 type="text"
                 placeholder="Enter password"
                 name="password"
-                value={data?.password || ""}
+                value={data?.password ?? ""}
                 onChange={handleInputChange}
                 aria-describedby="inputGroupPrepend"
                 isInvalid={!!errors?.password}
@@ -324,6 +334,7 @@ function UserDetails() {
               <Form.Control
                 required
                 type="text"
+                
                 placeholder="Enter role"
                 name="role"
                 value={data?.role || ""}

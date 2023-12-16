@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { ApiCall } from "../service/ApiCall";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 function DeathStockPage() {
   const [riturn, setReturn] = useState([]);
   const [errors, setErrors] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [timeSearchTerm, setTimeSearchTerm] = useState("");
   useEffect(() => {
     fetchReturn();
   }, []);
@@ -25,9 +28,43 @@ function DeathStockPage() {
       setLoading(false);
     }
   };
+  const formatTimestamp = (createdAt) => {
+    const options = {
+      year: 'numeric',
+      month: 'numeric',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true,
+    };
+    return new Date(createdAt).toLocaleString('en-US', options);
+  };
 
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+    // Optionally, you can fetch history here based on the selected date.
+  };
+  const filteredHistory = riturn.filter((movement) => {
+    const movementDate = new Date(movement.updatedAt).toLocaleDateString().toLowerCase();
+    const selectedDateFormatted = selectedDate ? selectedDate.toLocaleDateString().toLowerCase() : "";
+    return movementDate.includes(timeSearchTerm.toLowerCase()) && movementDate.includes(selectedDateFormatted);
+  });
   return (
     <>
+       <div>
+        <form className="nav-link mt-2 mt-md-0 d-none d-lg-flex search justify-content-end" style={{  marginBottom: "10px" }}>
+         
+          <DatePicker
+            selected={selectedDate}
+            onChange={handleDateChange}
+            placeholderText="Select Date"
+            dateFormat="MM/dd/yyyy"
+          
+            className="form-control ml-2 custom-datepicker"
+           
+          />
+        </form>
+      </div>
      <div className="col-lg-15 grid-margin stretch-card">
         <div className="card">
           <div className="card-body">
@@ -41,14 +78,17 @@ function DeathStockPage() {
                   <tr>
                     <th style={{ color: '#00d25b' }}>Warehouse Name</th>
                     <th style={{ color: '#00d25b' }}>Product Name</th>
+                    <th style={{ color: '#00d25b' }}>Time</th>
                     <th style={{ color: '#00d25b' }}>Quantity</th>
                   </tr>
                 </thead>
                 <tbody style={{ borderRadius: '10px', overflow: 'hidden' }}>
-                  {riturn && riturn.map((item, index) => (
+                  {filteredHistory && filteredHistory.map((item, index) => (
                     <tr key={item._id} style={{ transition: 'background-color 0.3s ease' }}>
                       <td>{item.warehouse.warehousename}</td>
-                      <td>{item.product[0].product.productname}</td>
+                         <td>{item.product[0].product.productname}</td>
+                      <td>{formatTimestamp(item.updatedAt)}</td>
+                   
                       <td>
                         <label className="badge badge-danger" style={{
                           borderRadius: '5px',
