@@ -59,45 +59,44 @@ function ProductsPage() {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        console.log(data,"data")
+      e.preventDefault();
       const form = e.currentTarget;
-      if (form.checkValidity() === false) {
-        e.stopPropagation();
+      const validationErrors = validateForm(data);
+  
+      if (Object.keys(validationErrors).length > 0) {
+        setErrors(validationErrors);
         setValidated(true);
         return;
       }
   
       setValidated(true);
   
-  
       try {
         const endpoint = data._id ? `/products/${data._id}` : "/products";
-        const method =  data._id ? "put" : "post";
-  console.log(endpoint,method,"endpoint methed")
-          const response = await ApiCall(method, endpoint, data);
-          console.log(response,"prodectupdate")
+        const method = data._id ? "put" : "post";
+  
+        const response = await ApiCall(method, endpoint, data);
   
         if (response.status) {
-          console.log("Warehouse Created/Edited Successfully");
+          console.log("Product Created/Edited Successfully");
           Show_Toast(response.message, true);
-          setData('')
+          setData('');
           fetchProduct();
           handleCloseModal();
         } else {
-          console.error("Error creating/editing warehouse:", response.message);
+          console.error("Error creating/editing product:", response.message);
           Show_Toast(response.message, false);
         }
       } catch (error) {
-        console.error("Error creating/editing warehouse:", error);
+        console.error("Error creating/editing product:", error);
       }
     };
   
     const validateForm = (formData) => {
       const errors = {};
   
-      if (!formData.warehousename) {
-        errors.warehousename = "Warehouse Name is required";
+      if (!formData.productname || formData.productname.trim() === "" || !/\S/.test(formData.productname)) {
+        errors.productname = "Product name is required and must contain at least one non-space character";
       }
   
       return errors;
@@ -107,6 +106,9 @@ function ProductsPage() {
       const { name, value } = e.target;
       setData({ ...data, [name]: value });
     };
+  
+  
+    
  
     const handleDelete = async (productId) => {
         try {
@@ -256,7 +258,7 @@ function ProductsPage() {
                   value={data?.productname ?? ""}
                   onChange={handleInputChange}
                   aria-describedby="inputGroupPrepend"
-                  isInvalid={!!errors.warehousename}
+                  isInvalid={!!errors.productname}
                 />
                 <Form.Control.Feedback type="invalid">
                   {errors.productname}

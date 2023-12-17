@@ -73,17 +73,36 @@ function LoginForm() {
   };
 
 
+  // const validateForm = (data) => {
+  //   const errors = {};
+
+  //   if (!data. username) {
+  //     errors. username = "  username is required";
+  //   }
+
+  //   if (!data.password) {
+  //     errors.password = "Password is required";
+  //   }
+
+  //   return errors;
+  // };
   const validateForm = (data) => {
     const errors = {};
-
-    if (!data. username) {
-      errors. username = "  username is required";
+    if (!data.username || data.username.trim() === "" || !/\S/.test(data.username)) {
+      errors.username = "username name is required and must contain at least one non-space character";
     }
-
-    if (!data.password) {
-      errors.password = "Password is required";
+    if (!data.password || data.password.trim() === "" || !/\S/.test(data.password)) {
+      errors.password = "password  is required and must contain at least one non-space character";
     }
-
+  
+    // if (!data.username || data.username.trim() === "") {
+    //   errors.username = "Username is required";
+    // }
+  
+    // if (!data.password || data.password.trim() === "") {
+    //   errors.password = "Password is required";
+    // }
+  
     return errors;
   };
 

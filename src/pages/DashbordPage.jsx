@@ -20,48 +20,41 @@ import { Products } from '../utils/Path_Url';
 
 ChartJS.register(
   CategoryScale,
-LinearScale,
-BarElement,
-Title,
-Tooltip,
-Legend,
-ArcElement,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement,
 )
-
 
 function DashbordPage() {
 
-  const navigate =useNavigate()
+  const navigate = useNavigate()
   const [chartdata, setChartdata] = useState([]);
-
-  console.log("stocks",chartdata)
-  const barWidth = 60; 
+  const barWidth = 60;
 
   const dashboarddata = async () => {
     try {
       const response = await ApiCall("get", '/stocks/total');
-  
+
       console.log("response", response);
-  
+
       // Assuming response.data is an array and you want to sort it based on a specific property
       const sortedData = response?.data.sort((a, b) => b.totalStock - a.totalStock);
-  
+
       setChartdata(sortedData);
-  
+
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
- 
+
   const colors = [
-    
- 
     'rgba(54,162,235,0.6)',
- 
     'rgba(153,102,255,0.6)',
     'rgba(75,192,192,0.6)',
     'rgba(255,99,132,0.6)',
-    
   ];
   const data = {
     labels: chartdata?.map(item => item?.warehouse),
@@ -69,36 +62,32 @@ function DashbordPage() {
       {
         label: 'Total Stock',
         data: chartdata?.map(item => item?.totalStock),
-        backgroundColor: colors, 
-        borderColor: colors, 
+        backgroundColor: colors,
+        borderColor: colors,
         borderWidth: 1,
-        barThickness : barWidth 
+        barThickness: barWidth
       },
     ],
   };
   const options = {
     scales: {
       x: {
-        barPercentage: 0.9, 
-        categoryPercentage: 0.8, 
-      },
-    },
-  };
+        barPercentage: 0.9,
+        categoryPercentage: 0.8,
+      },
+    },
+  };
 
   useEffect(() => {
     dashboarddata();
   }, []);
-  console.log(chartdata);
-  
-
-
 
   const chartRef = useRef(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [validated, setValidated] = useState(false);
-  const [ productname, setProductname] = useState('');
+  const [productname, setProductname] = useState('');
   const [productid, setProductid] = useState('');
-
+  const [errors, setErrors] = useState({});
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
@@ -109,34 +98,45 @@ function DashbordPage() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    if (name === 'username') {
+    if (name === 'productname') {
       setProductname(value);
     } else if (name === 'productid') {
       setProductid(value);
     }
   };
 
+
+  const validateForm = (formData) => {
+    const errors = {};
+
+    if (!formData.productname || formData.productname.trim() === "" || !/\S/.test(formData.productname)) {
+      errors.productname = "Product name is required and must contain at least one non-space character";
+    }
+
+    return errors;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.currentTarget;
-
-    if (form.checkValidity() === false) {
-      e.stopPropagation();
-    } else {
+    const validationErrors = validateForm({ productname });
+  
+    setErrors(validationErrors);
+    setValidated(true);
+  
+    if (Object.keys(validationErrors).length === 0 && form.checkValidity()) {
       try {
         const response = await ApiCall('POST', '/products', {
-         productname,
-        
+          productname,
         });
-        console.log(response)
-
+  
         if (response.status === 200) {
-          Show_Toast(response.message, true,);
-          setProductname('')
-          navigate(Products)
-          // Additional logic after successful API call
+          Show_Toast(response.message, true);
+          setProductname('');
+          navigate(Products);
+          // Additional logic after a successful API call
         } else {
-          Show_Toast('Failed to add product:', response.message,false);
+          Show_Toast('Failed to add product:', response.message, false);
         }
       } catch (error) {
         console.error('Error adding product:', error.message);
@@ -144,11 +144,8 @@ function DashbordPage() {
         handleCloseModal();
       }
     }
-
-    setValidated(true);
   };
 
- 
   return (
     <>
       <button
@@ -159,14 +156,12 @@ function DashbordPage() {
         <i className="mdi mdi-account-plus"></i> Add New Product
       </button>
 
-     
-      
       <Container>
-        
+
         <Bar data={data} options={options}>
-          
-       </Bar>
-     
+
+        </Bar>
+
       </Container>
 
       <ModalForm
@@ -175,41 +170,26 @@ function DashbordPage() {
         title="Add New Product"
       >
         <Form noValidate validated={validated} onSubmit={handleSubmit}>
-          <Form.Group as={Col} controlId="validationCustom01">
-            <Form.Label className="mb-1">Product Name</Form.Label>
-            <InputGroup hasValidation>
-              <Form.Control
+        <Form.Group as={Col} controlId="validationCustom01">
+  <Form.Label className="mb-1">Product Name</Form.Label>
+  <InputGroup hasValidation>
+    <Form.Control
+      
                 required
                 type="text"
-                placeholder="Enter product name"
-                name="username"
-                value={productname}
+                placeholder="Enter Product Name"
+                name="productname"
+                value={data?.productname }
                 onChange={handleInputChange}
                 aria-describedby="inputGroupPrepend"
-              />
-              <Form.Control.Feedback type="invalid">
-                Please enter a product name.
-              </Form.Control.Feedback>
-            </InputGroup>
-          </Form.Group>
+                isInvalid={!!errors.productname}
+    />
+    <Form.Control.Feedback type="invalid">
+    {errors.productname}
+    </Form.Control.Feedback>
+  </InputGroup>
+</Form.Group>
 
-          {/* <Form.Group className="mb-3" as={Col} controlId="validationCustom02">
-            <Form.Label className="mb-1 mt-4">Product ID</Form.Label>
-            <InputGroup hasValidation>
-              <Form.Control
-                required
-                type="text"
-                placeholder="Enter product ID"
-                name="productid"
-                value={productid}
-                onChange={handleInputChange}
-                aria-describedby="inputGroupPrepend"
-              />
-              <Form.Control.Feedback type="invalid">
-                Please enter a product ID.
-              </Form.Control.Feedback>
-            </InputGroup>
-          </Form.Group> */}
 
           <div className="d-flex justify-content-end mt-4">
             <Button
@@ -223,7 +203,7 @@ function DashbordPage() {
         </Form>
       </ModalForm>
       <ModalForm>
-        
+
       </ModalForm>
     </>
   );

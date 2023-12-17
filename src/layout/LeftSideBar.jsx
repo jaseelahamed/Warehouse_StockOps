@@ -15,7 +15,7 @@ function LeftSideBar() {
   console.log(Role,"role")
   return (
     <>
-      <nav style={{height:'1025px', width:'250px'}} className="sidebar sidebar-offcanvas" id="sidebar">
+      <nav style={{height:'2025px', width:'250px'}} className="sidebar sidebar-offcanvas" id="sidebar">
         <div className="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
        
           <a

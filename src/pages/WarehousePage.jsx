@@ -88,9 +88,10 @@ function WarehousePage() {
   const validateForm = (formData) => {
     const errors = {};
 
-    if (!formData.warehousename) {
-      errors.warehousename = "Warehouse Name is required";
+    if (!formData.warehousename || formData.warehousename.trim() === "" || !/\S/.test(formData.warehousename)) {
+      errors.warehousename = "warehousename name is required and must contain at least one non-space character";
     }
+
 
     return errors;
   };
@@ -139,8 +140,6 @@ function WarehousePage() {
       console.error("Error updating warehouse status:", error);
     }
   };
-
-  
 
   const filteredWarehouses = warehouses.filter(
     (warehouse) =>
